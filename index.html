@@ -1,187 +1,1055 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مستكاوي | عبق التراث في كل تفصيلة</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="أكاديمية المنى - منصة تسجيل ومتابعة الطلاب">
+
+    <meta name="theme-color"
+          content="#0b3d2e">
+
+    <title>أكاديمية المنى | تسجيل الطلاب</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="site-header">
-  <div class="container header-row">
-    <a href="index.html" class="brand">
-      <span class="brand-mark"></span>
-      <span class="kufi">مستكاوي</span>
-    </a>
-    <nav class="main-nav">
-      <a href="index.html" class="active">الرئيسية</a>
-      <a href="shop.html">المتجر</a>
-      <a href="shop.html?cat=بخور%20وعود">البخور والعود</a>
-      <a href="shop.html?cat=هدايا%20تراثية">الهدايا</a>
-    </nav>
-    <div class="header-actions">
-      <a href="login.html" class="icon-btn" title="حسابي">👤</a>
-      <a href="cart.html" class="icon-btn" title="السلة">
-        🛍️
-        <span class="cart-count" data-cart-count>0</span>
-      </a>
-      <button class="nav-toggle" aria-label="القائمة">☰</button>
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="top-bar">
+    <div class="container">
+
+        <span>
+            ✦ أهلاً بكم في أكاديمية المنى
+        </span>
+
+        <span>
+            التسجيل متاح الآن
+        </span>
+
     </div>
-  </div>
+</div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="site-header">
+
+    <div class="container header-row">
+
+        <!-- LOGO -->
+
+        <a href="index.html" class="brand">
+
+            <span class="brand-mark">
+                م
+            </span>
+
+            <span class="brand-text">
+                أكاديمية المنى
+            </span>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="main-nav">
+
+            <a href="index.html" class="active">
+                الرئيسية
+            </a>
+
+            <a href="#registration">
+                تسجيل الطلاب
+            </a>
+
+            <a href="#about">
+                عن الأكاديمية
+            </a>
+
+            <a href="#contact">
+                تواصل معنا
+            </a>
+
+        </nav>
+
+
+        <!-- ACTIONS -->
+
+        <div class="header-actions">
+
+            <a href="login.html"
+               class="icon-btn"
+               title="دخول المالك">
+
+                👤
+
+            </a>
+
+            <a href="login.html"
+               class="btn btn-small">
+
+                دخول المالك
+
+            </a>
+
+        </div>
+
+    </div>
+
 </header>
 
+
+
+<!-- =========================
+     HERO
+========================= -->
+
 <section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <p class="hero-eyebrow">تراث الجزيرة، بلمسة اليوم</p>
-      <h1>عبق أصيل يُروى<br>من قلب <span>نجد</span></h1>
-      <p class="lead">مستكاوي متجر متخصص في العود والبخور والعطور والهدايا التراثية، منتقاة يدوياً من حرفيين محليين لتصلك بجودتها الأصلية.</p>
-      <div class="hero-cta">
-        <a href="shop.html" class="btn btn-primary">تسوّق المجموعة</a>
-        <a href="#story" class="btn btn-outline">تعرّف على قصتنا</a>
-      </div>
-    </div>
-    <div class="hero-art">
-      <div class="smoke"></div>
-      <div class="hero-stats">
-        <div><strong>+12</strong><span>سنة خبرة</span></div>
-        <div><strong>+40</strong><span>منتج أصيل</span></div>
-        <div><strong>+9,000</strong><span>عميل راضٍ</span></div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <h2>تسوّق حسب الفئة</h2>
-        <p>كل فئة تحمل حكاية مختلفة من تراث الجزيرة العربية</p>
-      </div>
-      <a href="shop.html" class="section-link">عرض كل المنتجات ←</a>
-    </div>
-    <div class="cat-grid">
-      <a class="cat-card" href="shop.html?cat=بخور%20وعود">
-        <div class="cat-icon">🪵</div>
-        <h3>البخور والعود</h3>
-        <span>عود، عنبر، معمول</span>
-      </a>
-      <a class="cat-card" href="shop.html?cat=عطور">
-        <div class="cat-icon">🧴</div>
-        <h3>العطور</h3>
-        <span>دهن عود، مسك، عنبر</span>
-      </a>
-      <a class="cat-card" href="shop.html?cat=تمور">
-        <div class="cat-icon">🌴</div>
-        <h3>التمور</h3>
-        <span>سكري، عجوة، صفري</span>
-      </a>
-      <a class="cat-card" href="shop.html?cat=هدايا%20تراثية">
-        <div class="cat-icon">🎁</div>
-        <h3>الهدايا التراثية</h3>
-        <span>مباخر، مسابح، صناديق</span>
-      </a>
-    </div>
-  </div>
-</section>
+    <div class="container hero-grid">
 
-<section class="section" style="padding-top:0;">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <h2>الأكثر طلباً</h2>
-        <p>منتجات اختارها عملاؤنا مراراً لجودتها وعبقها المميز</p>
-      </div>
-      <a href="shop.html" class="section-link">تصفّح المتجر ←</a>
-    </div>
-    <div class="product-grid" id="home-product-grid"></div>
-  </div>
-</section>
+        <div class="hero-content">
 
-<section class="section" id="story" style="padding-top:0;">
-  <div class="container split">
-    <div class="split-art"></div>
-    <div>
-      <p class="hero-eyebrow">قصتنا</p>
-      <h2 style="font-size:32px;">من مجالس نجد إلى بيتك</h2>
-      <p style="color:var(--muted); margin-top:16px; max-width:50ch;">بدأت مستكاوي كمشروع عائلي صغير لتوثيق عبق البخور والعطور النجدية الأصيلة، واليوم نعمل مع أكثر من 30 حرفياً محلياً لنقدّم لك منتجات حقيقية بلا وسطاء.</p>
-      <div class="feature-list">
-        <div class="feature-item">
-          <span class="feature-dot"></span>
-          <div><h4>مصدر موثوق</h4><p>كل منتج يأتي من حرفي أو مزرعة معروفة الهوية.</p></div>
+            <div class="hero-badge">
+
+                <span class="status-dot"></span>
+
+                التسجيل مفتوح الآن
+
+            </div>
+
+
+            <h1>
+
+                مستقبلك يبدأ
+                <br>
+
+                من <span>أكاديمية المنى</span>
+
+            </h1>
+
+
+            <p class="lead">
+
+                منصة أكاديمية المنى لتسجيل الطلاب
+                ومتابعة بياناتهم بطريقة سهلة،
+                منظمة واحترافية.
+
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a href="register.html"
+                   class="btn btn-primary">
+
+                    🎓 تسجيل طالب
+
+                </a>
+
+
+                <a href="#about"
+                   class="btn btn-outline">
+
+                    تعرف على الأكاديمية
+
+                </a>
+
+            </div>
+
+
+            <!-- QUICK INFO -->
+
+            <div class="hero-info">
+
+                <div>
+
+                    <strong>24/7</strong>
+
+                    <span>
+                        متابعة مستمرة
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>100%</strong>
+
+                    <span>
+                        تنظيم إلكتروني
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>✓</strong>
+
+                    <span>
+                        تسجيل سريع
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
-        <div class="feature-item">
-          <span class="feature-dot"></span>
-          <div><h4>تغليف يليق بالهدية</h4><p>تغليف تراثي أنيق مناسب للإهداء المباشر.</p></div>
+
+
+        <!-- HERO ART -->
+
+        <div class="hero-art">
+
+            <div class="academy-card">
+
+                <div class="academy-symbol">
+                    م
+                </div>
+
+                <h3>
+                    أكاديمية المنى
+                </h3>
+
+                <p>
+                    العلم طريق النجاح
+                </p>
+
+                <div class="academy-line"></div>
+
+            </div>
+
+
+            <div class="floating-card card-one">
+
+                🎓
+
+                <span>
+                    طلابنا
+                </span>
+
+            </div>
+
+
+            <div class="floating-card card-two">
+
+                ✓
+
+                <span>
+                    تسجيل إلكتروني
+                </span>
+
+            </div>
+
         </div>
-        <div class="feature-item">
-          <span class="feature-dot"></span>
-          <div><h4>شحن لجميع مناطق المملكة</h4><p>توصيل خلال 2-4 أيام عمل مع إمكانية الدفع عند الاستلام.</p></div>
-        </div>
-      </div>
+
     </div>
-  </div>
+
 </section>
 
-<section class="band">
-  <div class="container band-row">
-    <div>
-      <h2>كن أول من يعرف عن إصداراتنا الجديدة</h2>
-      <p>اشترك في نشرتنا البريدية ولا تفوّت العروض الموسمية</p>
+
+
+<!-- =========================
+     STUDENTS COUNTER
+========================= -->
+
+<section class="stats-section">
+
+    <div class="container stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👨‍🎓
+            </div>
+
+            <strong id="studentsCount">
+                0
+            </strong>
+
+            <span>
+                عدد الطلاب المسجلين
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <strong>
+                100%
+            </strong>
+
+            <span>
+                تنظيم البيانات
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏫
+            </div>
+
+            <strong>
+                1
+            </strong>
+
+            <span>
+                أكاديمية المنى
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⭐
+            </div>
+
+            <strong>
+                24/7
+            </strong>
+
+            <span>
+                خدمة واستفسارات
+            </span>
+
+        </div>
+
     </div>
-    <form class="band-form" onsubmit="event.preventDefault(); showToast('تم تسجيل اشتراكك بنجاح');">
-      <input type="email" placeholder="بريدك الإلكتروني" required>
-      <button class="btn btn-primary" type="submit">اشترك الآن</button>
-    </form>
-  </div>
+
 </section>
+
+
+
+<!-- =========================
+     REGISTRATION
+========================= -->
+
+<section class="section" id="registration">
+
+    <div class="container">
+
+        <div class="section-head">
+
+            <div>
+
+                <div class="section-label">
+                    التسجيل
+                </div>
+
+                <h2>
+                    سجّل ابنك في أكاديمية المنى
+                </h2>
+
+                <p>
+                    قم بإدخال بيانات الطالب وسيتم
+                    إرسال الطلب إلى إدارة الأكاديمية.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="registration-box">
+
+            <div class="registration-content">
+
+                <div class="registration-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    تسجيل طالب جديد
+                </h3>
+
+                <p>
+
+                    التسجيل يتم خلال دقائق،
+                    وبعد إتمام الطلب سيتم تحويلك
+                    مباشرة إلى واتساب للتواصل مع
+                    إدارة الأكاديمية.
+
+                </p>
+
+
+                <div class="registration-features">
+
+                    <div>
+                        <span>✓</span>
+                        بيانات الطالب
+                    </div>
+
+                    <div>
+                        <span>✓</span>
+                        بيانات ولي الأمر
+                    </div>
+
+                    <div>
+                        <span>✓</span>
+                        رقم الهاتف
+                    </div>
+
+                    <div>
+                        <span>✓</span>
+                        بيانات إضافية
+                    </div>
+
+                </div>
+
+
+                <a href="register.html"
+                   class="btn btn-primary">
+
+                    ابدأ تسجيل الطالب
+
+                </a>
+
+            </div>
+
+
+            <div class="registration-visual">
+
+                <div class="document-card">
+
+                    <div class="document-top">
+
+                        <span>
+                            أكاديمية المنى
+                        </span>
+
+                        <span>
+                            ✓
+                        </span>
+
+                    </div>
+
+                    <div class="document-line large"></div>
+
+                    <div class="document-line"></div>
+
+                    <div class="document-line"></div>
+
+                    <div class="document-line short"></div>
+
+                    <div class="document-check">
+                        ✓
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section class="section about-section"
+         id="about">
+
+    <div class="container split">
+
+
+        <div class="about-art">
+
+            <div class="about-circle">
+
+                <span>
+                    المنى
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="about-content">
+
+            <div class="section-label">
+                عن الأكاديمية
+            </div>
+
+            <h2>
+                بيئة تعليمية تهتم
+                <span>بمستقبل أبنائنا</span>
+            </h2>
+
+            <p>
+
+                تسعى أكاديمية المنى إلى توفير
+                بيئة تعليمية منظمة تساعد الطلاب
+                على التطور والنجاح، مع الاهتمام
+                ببيانات الطالب والتواصل المستمر
+                مع ولي الأمر.
+
+            </p>
+
+
+            <div class="feature-list">
+
+
+                <div class="feature-item">
+
+                    <span class="feature-dot">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <h4>
+                            تسجيل إلكتروني
+                        </h4>
+
+                        <p>
+                            تسجيل بيانات الطالب
+                            بسهولة وسرعة.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span class="feature-dot">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <h4>
+                            تنظيم بيانات الطلاب
+                        </h4>
+
+                        <p>
+                            إدارة بيانات الطلاب
+                            بطريقة منظمة.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span class="feature-dot">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <h4>
+                            تواصل مباشر
+                        </h4>
+
+                        <p>
+                            التواصل مع إدارة الأكاديمية
+                            عبر واتساب.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section class="section process-section">
+
+    <div class="container">
+
+        <div class="section-head centered">
+
+            <div>
+
+                <div class="section-label">
+                    طريقة التسجيل
+                </div>
+
+                <h2>
+                    التسجيل في ثلاث خطوات
+                </h2>
+
+                <p>
+                    عملية بسيطة وسريعة
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="process-grid">
+
+
+            <div class="process-card">
+
+                <span class="process-number">
+                    01
+                </span>
+
+                <div class="process-icon">
+                    📝
+                </div>
+
+                <h3>
+                    إدخال البيانات
+                </h3>
+
+                <p>
+                    أدخل بيانات الطالب وولي الأمر
+                    المطلوبة.
+                </p>
+
+            </div>
+
+
+            <div class="process-card">
+
+                <span class="process-number">
+                    02
+                </span>
+
+                <div class="process-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    مراجعة الطلب
+                </h3>
+
+                <p>
+                    راجع جميع البيانات قبل إتمام
+                    عملية التسجيل.
+                </p>
+
+            </div>
+
+
+            <div class="process-card">
+
+                <span class="process-number">
+                    03
+                </span>
+
+                <div class="process-icon">
+                    💬
+                </div>
+
+                <h3>
+                    التواصل معنا
+                </h3>
+
+                <p>
+                    بعد الإتمام سيتم تحويلك إلى
+                    واتساب للتواصل مع الإدارة.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section class="contact-section"
+         id="contact">
+
+    <div class="container">
+
+        <div class="contact-box">
+
+
+            <div class="contact-content">
+
+                <div class="section-label">
+                    تواصل معنا
+                </div>
+
+                <h2>
+                    لديك استفسار؟
+                    <br>
+                    نحن هنا لمساعدتك
+                </h2>
+
+                <p>
+
+                    للاستفسار عن التسجيل أو الدراسة
+                    أو أي شيء يخص أكاديمية المنى،
+                    يمكنك التواصل معنا مباشرة.
+
+                </p>
+
+            </div>
+
+
+            <div class="whatsapp-list">
+
+
+                <a href="https://wa.me/201140752330"
+                   target="_blank"
+                   rel="noopener"
+                   class="whatsapp-card">
+
+                    <span class="whatsapp-icon">
+                        WA
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            اتصالات
+                        </strong>
+
+                        <span>
+                            +20 114 075 2330
+                        </span>
+
+                    </div>
+
+                    <span class="arrow">
+                        ←
+                    </span>
+
+                </a>
+
+
+                <a href="https://wa.me/201061240956"
+                   target="_blank"
+                   rel="noopener"
+                   class="whatsapp-card">
+
+                    <span class="whatsapp-icon">
+                        WA
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            فودافون
+                        </strong>
+
+                        <span>
+                            +20 106 124 0956
+                        </span>
+
+                    </div>
+
+                    <span class="arrow">
+                        ←
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     OWNER
+========================= -->
+
+<section class="owner-section">
+
+    <div class="container">
+
+        <div class="owner-box">
+
+            <div>
+
+                <span class="owner-label">
+                    الإدارة
+                </span>
+
+                <h3>
+                    لوحة إدارة الأكاديمية
+                </h3>
+
+                <p>
+                    الدخول مخصص لمالك الأكاديمية
+                    لإدارة بيانات الطلاب.
+                </p>
+
+            </div>
+
+
+            <a href="login.html"
+               class="btn btn-primary">
+
+                🔐 دخول المالك
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-about">
-        <a href="index.html" class="brand"><span class="brand-mark"></span><span class="kufi">مستكاوي</span></a>
-        <p>متجر إلكتروني سعودي متخصص في العود والبخور والعطور والهدايا التراثية الأصيلة.</p>
-      </div>
-      <div>
-        <h5>تسوّق</h5>
-        <ul>
-          <li><a href="shop.html?cat=بخور%20وعود">البخور والعود</a></li>
-          <li><a href="shop.html?cat=عطور">العطور</a></li>
-          <li><a href="shop.html?cat=تمور">التمور</a></li>
-          <li><a href="shop.html?cat=هدايا%20تراثية">الهدايا التراثية</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>الحساب</h5>
-        <ul>
-          <li><a href="login.html">تسجيل الدخول</a></li>
-          <li><a href="register.html">إنشاء حساب</a></li>
-          <li><a href="cart.html">سلة المشتريات</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>تواصل معنا</h5>
-        <ul>
-          <li><a href="#">الأسئلة الشائعة</a></li>
-          <li><a href="#">سياسة الإرجاع</a></li>
-          <li><a href="#">واتساب: 966500000000</a></li>
-        </ul>
-      </div>
+
+    <div class="container">
+
+
+        <div class="footer-grid">
+
+
+            <div class="footer-about">
+
+                <a href="index.html"
+                   class="brand">
+
+                    <span class="brand-mark">
+                        م
+                    </span>
+
+                    <span class="brand-text">
+                        أكاديمية المنى
+                    </span>
+
+                </a>
+
+                <p>
+
+                    أكاديمية المنى
+                    <br>
+                    العلم طريق النجاح.
+
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    روابط سريعة
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a href="index.html">
+                            الرئيسية
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="register.html">
+                            تسجيل طالب
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="login.html">
+                            دخول المالك
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    تواصل معنا
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a href="https://wa.me/201140752330"
+                           target="_blank">
+                            واتساب - اتصالات
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://wa.me/201061240956"
+                           target="_blank">
+                            واتساب - فودافون
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    معلومات
+                </h5>
+
+                <ul>
+
+                    <li>
+                        تسجيل الطلاب
+                    </li>
+
+                    <li>
+                        متابعة البيانات
+                    </li>
+
+                    <li>
+                        خدمة الاستفسارات
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 أكاديمية المنى
+            </span>
+
+            <span>
+                جميع الحقوق محفوظة
+            </span>
+
+            <span class="developer">
+                Developed by
+                <strong>
+                    yaseen amr abd el rahem
+                </strong>
+            </span>
+
+        </div>
+
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 مستكاوي. جميع الحقوق محفوظة.</span>
-      <span>صُنع بحب من قلب نجد</span>
-    </div>
-  </div>
+
 </footer>
 
-<script src="products.js"></script>
+
+
+<!-- =========================
+     SCRIPTS
+========================= -->
+
 <script src="script.js"></script>
+
+
 <script>
-  renderProductGrid(document.getElementById('home-product-grid'), NANJAWI_PRODUCTS.slice(0, 8));
+
+/*
+=========================================
+عداد الطلاب
+=========================================
+
+يقرأ عدد الطلاب من localStorage.
+عند عدم وجود بيانات يبدأ من صفر.
+
+وعندما نربطه مع لوحة المالك
+سيتم تحديث العدد تلقائياً.
+*/
+
+(function () {
+
+    const counter =
+        document.getElementById("studentsCount");
+
+    if (!counter) return;
+
+
+    let students = [];
+
+    try {
+
+        students =
+            JSON.parse(
+                localStorage.getItem("academy_students")
+            ) || [];
+
+    } catch (error) {
+
+        students = [];
+
+    }
+
+
+    counter.textContent =
+        students.length.toLocaleString("ar-EG");
+
+})();
+
 </script>
+
+
 </body>
 </html>
