@@ -1,67 +1,1098 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إنشاء حساب | مستكاوي</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#0b3d2e">
+
+    <meta name="description"
+          content="تسجيل الطلاب في أكاديمية المنى">
+
+    <title>تسجيل طالب | أكاديمية المنى</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="auth-wrap">
-  <div class="auth-panel">
-    <a href="index.html" class="brand"><span class="brand-mark"></span><span class="kufi">مستكاوي</span></a>
-    <div class="auth-quote">
-      <p class="big">"انضم إلى مجتمع محبي التراث، واحصل على عروض تصلك أولاً بأول."</p>
-      <p class="by">— فريق مستكاوي</p>
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="top-bar">
+
+    <div class="container">
+
+        <span>
+            ✦ أكاديمية المنى
+        </span>
+
+        <span>
+            التسجيل متاح الآن
+        </span>
+
     </div>
-    <div></div>
-  </div>
 
-  <div class="auth-form-side">
-    <div class="auth-box">
-      <h1>إنشاء حساب جديد</h1>
-      <p class="sub">انضم إلينا في دقيقة واحدة وابدأ رحلتك مع مستكاوي</p>
-
-      <form id="register-form" novalidate>
-        <div class="field" id="reg-name-field">
-          <label for="reg-name">الاسم الكامل</label>
-          <input type="text" id="reg-name" placeholder="اسمك الثلاثي" required>
-          <span class="field-error">الاسم يجب ألا يقل عن 3 أحرف</span>
-        </div>
-
-        <div class="field" id="reg-email-field">
-          <label for="reg-email">البريد الإلكتروني</label>
-          <input type="email" id="reg-email" placeholder="example@nanjawi.com" required>
-          <span class="field-error">يرجى إدخال بريد إلكتروني صحيح</span>
-        </div>
-
-        <div class="field" id="reg-password-field">
-          <label for="reg-password">كلمة المرور</label>
-          <input type="password" id="reg-password" placeholder="••••••••" required>
-          <span class="field-error">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
-        </div>
-
-        <div class="field" id="reg-confirm-field">
-          <label for="reg-confirm">تأكيد كلمة المرور</label>
-          <input type="password" id="reg-confirm" placeholder="••••••••" required>
-          <span class="field-error">كلمتا المرور غير متطابقتين</span>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block">إنشاء الحساب</button>
-      </form>
-
-      <div class="divider">أو سجّل عبر</div>
-      <div class="social-row">
-        <button class="social-btn">Google</button>
-        <button class="social-btn">Apple</button>
-      </div>
-
-      <p class="auth-switch">لديك حساب بالفعل؟ <a href="login.html" class="link-muted">تسجيل الدخول</a></p>
-    </div>
-  </div>
 </div>
 
-<script src="script.js"></script>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="site-header">
+
+    <div class="container header-row">
+
+        <a href="index.html" class="brand">
+
+            <span class="brand-mark">
+                م
+            </span>
+
+            <span class="brand-text">
+                أكاديمية المنى
+            </span>
+
+        </a>
+
+
+        <nav class="main-nav">
+
+            <a href="index.html">
+                الرئيسية
+            </a>
+
+            <a href="register.html" class="active">
+                تسجيل الطلاب
+            </a>
+
+            <a href="index.html#about">
+                عن الأكاديمية
+            </a>
+
+            <a href="index.html#contact">
+                تواصل معنا
+            </a>
+
+        </nav>
+
+
+        <div class="header-actions">
+
+            <a href="login.html"
+               class="icon-btn"
+               title="دخول المالك">
+
+                👤
+
+            </a>
+
+            <a href="login.html"
+               class="btn btn-small">
+
+                دخول المالك
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     REGISTER PAGE
+========================= -->
+
+<main class="auth-wrap academy-register">
+
+    <div class="register-container">
+
+
+        <!-- =====================
+             SIDE INFORMATION
+        ====================== -->
+
+        <aside class="register-side">
+
+            <div class="register-logo">
+
+                <span class="large-mark">
+                    م
+                </span>
+
+                <h2>
+                    أكاديمية المنى
+                </h2>
+
+                <p>
+                    العلم طريق النجاح
+                </p>
+
+            </div>
+
+
+            <div class="register-message">
+
+                <span class="message-icon">
+                    🎓
+                </span>
+
+                <h3>
+                    أهلاً بك في أكاديمية المنى
+                </h3>
+
+                <p>
+
+                    يسعدنا انضمام طالب جديد
+                    إلى أكاديميتنا.
+
+                    يرجى كتابة البيانات
+                    المطلوبة بدقة حتى نستطيع
+                    التواصل مع ولي الأمر.
+
+                </p>
+
+            </div>
+
+
+            <div class="register-benefits">
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+                        <strong>
+                            تسجيل سهل
+                        </strong>
+
+                        <small>
+                            عملية التسجيل بسيطة وسريعة
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+                        <strong>
+                            بيانات منظمة
+                        </strong>
+
+                        <small>
+                            يتم حفظ بيانات الطالب بشكل منظم
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+                        <strong>
+                            تواصل مباشر
+                        </strong>
+
+                        <small>
+                            إرسال الطلب مباشرة إلى الإدارة
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================
+             FORM
+        ====================== -->
+
+        <section class="auth-form-side">
+
+            <div class="auth-box register-box">
+
+                <div class="form-heading">
+
+                    <span class="form-label">
+                        تسجيل طالب جديد
+                    </span>
+
+                    <h1>
+                        بيانات الطالب
+                    </h1>
+
+                    <p class="sub">
+
+                        أدخل البيانات التالية بدقة،
+                        ثم اضغط على إتمام التسجيل.
+
+                    </p>
+
+                </div>
+
+
+                <form id="student-register-form"
+                      novalidate>
+
+
+                    <!-- =================
+                         STUDENT DATA
+                    ================== -->
+
+                    <div class="form-section-title">
+
+                        <span>01</span>
+
+                        بيانات الطالب
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="field">
+
+                            <label for="student-name">
+                                اسم الطالب بالكامل
+                            </label>
+
+                            <input
+                                type="text"
+                                id="student-name"
+                                name="studentName"
+                                placeholder="اكتب اسم الطالب بالكامل"
+                                autocomplete="name"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال اسم الطالب
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="student-age">
+                                عمر الطالب
+                            </label>
+
+                            <input
+                                type="number"
+                                id="student-age"
+                                name="studentAge"
+                                placeholder="العمر"
+                                min="3"
+                                max="30"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال عمر صحيح
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="student-gender">
+                                النوع
+                            </label>
+
+                            <select
+                                id="student-gender"
+                                name="studentGender"
+                                required>
+
+                                <option value="">
+                                    اختر النوع
+                                </option>
+
+                                <option value="ذكر">
+                                    ذكر
+                                </option>
+
+                                <option value="أنثى">
+                                    أنثى
+                                </option>
+
+                            </select>
+
+                            <span class="field-error">
+                                يرجى اختيار النوع
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="student-class">
+                                الصف الدراسي
+                            </label>
+
+                            <input
+                                type="text"
+                                id="student-class"
+                                name="studentClass"
+                                placeholder="مثال: الصف السادس"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال الصف الدراسي
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================
+                         PARENT DATA
+                    ================== -->
+
+                    <div class="form-section-title">
+
+                        <span>02</span>
+
+                        بيانات ولي الأمر
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="field">
+
+                            <label for="parent-name">
+                                اسم ولي الأمر
+                            </label>
+
+                            <input
+                                type="text"
+                                id="parent-name"
+                                name="parentName"
+                                placeholder="اسم ولي الأمر"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال اسم ولي الأمر
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="phone">
+                                رقم الهاتف الأساسي
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="01xxxxxxxxx"
+                                inputmode="tel"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال رقم الهاتف
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="extra-phone">
+                                رقم إضافي
+                                <small>(اختياري)</small>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="extra-phone"
+                                name="extraPhone"
+                                placeholder="01xxxxxxxxx"
+                                inputmode="tel">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="relation">
+                                صلة القرابة
+                            </label>
+
+                            <select
+                                id="relation"
+                                name="relation"
+                                required>
+
+                                <option value="">
+                                    اختر صلة القرابة
+                                </option>
+
+                                <option value="الأب">
+                                    الأب
+                                </option>
+
+                                <option value="الأم">
+                                    الأم
+                                </option>
+
+                                <option value="الجد">
+                                    الجد
+                                </option>
+
+                                <option value="الجدة">
+                                    الجدة
+                                </option>
+
+                                <option value="ولي أمر آخر">
+                                    ولي أمر آخر
+                                </option>
+
+                            </select>
+
+                            <span class="field-error">
+                                يرجى اختيار صلة القرابة
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================
+                         LOCATION
+                    ================== -->
+
+                    <div class="form-section-title">
+
+                        <span>03</span>
+
+                        بيانات السكن
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="field">
+
+                            <label for="governorate">
+                                المحافظة
+                            </label>
+
+                            <input
+                                type="text"
+                                id="governorate"
+                                name="governorate"
+                                placeholder="مثال: القاهرة"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال المحافظة
+                            </span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="area">
+                                المنطقة / المركز
+                            </label>
+
+                            <input
+                                type="text"
+                                id="area"
+                                name="area"
+                                placeholder="اسم المنطقة أو المركز"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال المنطقة
+                            </span>
+
+                        </div>
+
+
+                        <div class="field field-full">
+
+                            <label for="address">
+                                العنوان بالتفصيل
+                            </label>
+
+                            <input
+                                type="text"
+                                id="address"
+                                name="address"
+                                placeholder="الشارع - رقم المنزل - أي تفاصيل مهمة"
+                                required>
+
+                            <span class="field-error">
+                                يرجى إدخال العنوان
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================
+                         EXTRA INFORMATION
+                    ================== -->
+
+                    <div class="form-section-title">
+
+                        <span>04</span>
+
+                        معلومات إضافية
+
+                    </div>
+
+
+                    <div class="field field-full">
+
+                        <label for="notes">
+                            ملاحظات
+                            <small>(اختياري)</small>
+                        </label>
+
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="4"
+                            placeholder="اكتب أي ملاحظات أو معلومات إضافية تريد إبلاغ الأكاديمية بها"></textarea>
+
+                    </div>
+
+
+
+                    <!-- =================
+                         CONFIRMATION
+                    ================== -->
+
+                    <div class="form-confirm">
+
+                        <label class="check-row">
+
+                            <input
+                                type="checkbox"
+                                id="confirm-data"
+                                required>
+
+                            <span class="custom-check"></span>
+
+                            <span>
+                                أقر بأن البيانات التي أدخلتها
+                                صحيحة وأوافق على إرسالها
+                                إلى إدارة أكاديمية المنى.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =================
+                         SUBMIT
+                    ================== -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-block register-submit">
+
+                        <span>
+                            ✓
+                        </span>
+
+                        إتمام التسجيل وإرسال الطلب
+
+                    </button>
+
+
+                    <p class="form-note">
+
+                        بعد الضغط على إتمام التسجيل
+                        سيتم فتح واتساب وإرسال بيانات
+                        الطالب إلى إدارة الأكاديمية.
+
+                    </p>
+
+
+                </form>
+
+
+                <div class="register-footer">
+
+                    <a href="index.html">
+                        ← العودة إلى الصفحة الرئيسية
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="site-footer">
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+
+            <div class="footer-about">
+
+                <a href="index.html"
+                   class="brand">
+
+                    <span class="brand-mark">
+                        م
+                    </span>
+
+                    <span class="brand-text">
+                        أكاديمية المنى
+                    </span>
+
+                </a>
+
+                <p>
+                    العلم طريق النجاح.
+                    نسعى دائماً لتقديم بيئة
+                    تعليمية مميزة لأبنائنا.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    روابط سريعة
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a href="index.html">
+                            الرئيسية
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="register.html">
+                            تسجيل طالب
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="login.html">
+                            دخول المالك
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    التواصل
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a
+                            href="https://wa.me/201140752330"
+                            target="_blank"
+                            rel="noopener">
+
+                            اتصالات
+                            <br>
+                            +20 114 075 2330
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a
+                            href="https://wa.me/201061240956"
+                            target="_blank"
+                            rel="noopener">
+
+                            فودافون
+                            <br>
+                            +20 106 124 0956
+
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    الإدارة
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a href="login.html">
+                            دخول المالك
+                        </a>
+                    </li>
+
+                    <li>
+                        إدارة الطلاب
+                    </li>
+
+                    <li>
+                        تعديل البيانات
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 أكاديمية المنى
+            </span>
+
+            <span>
+                جميع الحقوق محفوظة
+            </span>
+
+            <span class="developer">
+
+                Developed by
+
+                <strong>
+                    yaseen amr abd el rahem
+                </strong>
+
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================
+     REGISTRATION SCRIPT
+========================= -->
+
+<script>
+
+document
+    .getElementById("student-register-form")
+    .addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+
+        const form = event.target;
+
+
+        /*
+        ==============================
+        قراءة البيانات
+        ==============================
+        */
+
+        const studentName =
+            document.getElementById("student-name").value.trim();
+
+        const studentAge =
+            document.getElementById("student-age").value.trim();
+
+        const studentGender =
+            document.getElementById("student-gender").value;
+
+        const studentClass =
+            document.getElementById("student-class").value.trim();
+
+
+        const parentName =
+            document.getElementById("parent-name").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const extraPhone =
+            document.getElementById("extra-phone").value.trim();
+
+        const relation =
+            document.getElementById("relation").value;
+
+
+        const governorate =
+            document.getElementById("governorate").value.trim();
+
+        const area =
+            document.getElementById("area").value.trim();
+
+        const address =
+            document.getElementById("address").value.trim();
+
+
+        const notes =
+            document.getElementById("notes").value.trim();
+
+
+        const confirmed =
+            document.getElementById("confirm-data").checked;
+
+
+
+        /*
+        ==============================
+        التحقق
+        ==============================
+        */
+
+        if (
+            !studentName ||
+            !studentAge ||
+            !studentGender ||
+            !studentClass ||
+            !parentName ||
+            !phone ||
+            !relation ||
+            !governorate ||
+            !area ||
+            !address ||
+            !confirmed
+        ) {
+
+            alert(
+                "يرجى إكمال جميع البيانات المطلوبة والموافقة على صحة البيانات."
+            );
+
+            return;
+
+        }
+
+
+
+        /*
+        ==============================
+        حفظ الطالب محلياً
+        ==============================
+        */
+
+        const student = {
+
+            id:
+                Date.now(),
+
+            studentName:
+                studentName,
+
+            studentAge:
+                studentAge,
+
+            studentGender:
+                studentGender,
+
+            studentClass:
+                studentClass,
+
+            parentName:
+                parentName,
+
+            phone:
+                phone,
+
+            extraPhone:
+                extraPhone,
+
+            relation:
+                relation,
+
+            governorate:
+                governorate,
+
+            area:
+                area,
+
+            address:
+                address,
+
+            notes:
+                notes,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        let students = [];
+
+
+        try {
+
+            students =
+                JSON.parse(
+                    localStorage.getItem("academy_students")
+                ) || [];
+
+        } catch (error) {
+
+            students = [];
+
+        }
+
+
+        students.push(student);
+
+
+        localStorage.setItem(
+            "academy_students",
+            JSON.stringify(students)
+        );
+
+
+
+        /*
+        ==============================
+        إنشاء رسالة واتساب
+        ==============================
+        */
+
+        const message =
+
+`🎓 *طلب تسجيل طالب جديد*
+*أكاديمية المنى*
+
+━━━━━━━━━━━━━━
+
+👨‍🎓 *بيانات الطالب*
+
+الاسم: ${studentName}
+العمر: ${studentAge}
+النوع: ${studentGender}
+الصف الدراسي: ${studentClass}
+
+━━━━━━━━━━━━━━
+
+👨‍👩‍👦 *بيانات ولي الأمر*
+
+الاسم: ${parentName}
+صلة القرابة: ${relation}
+رقم الهاتف: ${phone}
+رقم إضافي: ${extraPhone || "غير موجود"}
+
+━━━━━━━━━━━━━━
+
+📍 *بيانات السكن*
+
+المحافظة: ${governorate}
+المنطقة / المركز: ${area}
+العنوان: ${address}
+
+━━━━━━━━━━━━━━
+
+📝 *ملاحظات*
+
+${notes || "لا توجد ملاحظات"}
+
+━━━━━━━━━━━━━━
+
+✅ تم إرسال الطلب من موقع أكاديمية المنى.`;
+
+
+        /*
+        ==============================
+        رقم واتساب الأكاديمية
+        ==============================
+        */
+
+        const whatsappNumber =
+            "201140752330";
+
+
+        const whatsappURL =
+            "https://wa.me/" +
+            whatsappNumber +
+            "?text=" +
+            encodeURIComponent(message);
+
+
+
+        /*
+        ==============================
+        فتح واتساب
+        ==============================
+        */
+
+        window.location.href =
+            whatsappURL;
+
+    });
+
+</script>
+
+
 </body>
 </html>
