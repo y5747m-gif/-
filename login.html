@@ -1,60 +1,654 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تسجيل الدخول | مستكاوي</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#0b3d2e">
+
+    <meta name="description"
+          content="دخول مالك أكاديمية المنى لإدارة الطلاب">
+
+    <title>دخول المالك | أكاديمية المنى</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="auth-wrap">
-  <div class="auth-panel">
-    <a href="index.html" class="brand"><span class="brand-mark"></span><span class="kufi">مستكاوي</span></a>
-    <div class="auth-quote">
-      <p class="big">"كل قطعة عود تحمل حكاية أرض، وكل عطر يحمل ذكرى مجلس."</p>
-      <p class="by">— من فلسفة مستكاوي</p>
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="top-bar">
+
+    <div class="container">
+
+        <span>
+            ✦ أكاديمية المنى
+        </span>
+
+        <span>
+            لوحة الإدارة
+        </span>
+
     </div>
-    <div></div>
-  </div>
 
-  <div class="auth-form-side">
-    <div class="auth-box">
-      <h1>مرحباً بعودتك</h1>
-      <p class="sub">سجّل الدخول لمتابعة طلباتك والاستفادة من عروضك الخاصة</p>
-
-      <form id="login-form" novalidate>
-        <div class="field" id="login-email-field">
-          <label for="login-email">البريد الإلكتروني</label>
-          <input type="email" id="login-email" placeholder="example@nanjawi.com" required>
-          <span class="field-error">يرجى إدخال بريد إلكتروني صحيح</span>
-        </div>
-
-        <div class="field" id="login-password-field">
-          <label for="login-password">كلمة المرور</label>
-          <input type="password" id="login-password" placeholder="••••••••" required>
-          <span class="field-error">كلمة المرور يجب ألا تقل عن 6 أحرف</span>
-        </div>
-
-        <div class="field-row">
-          <label class="remember"><input type="checkbox"> تذكرني</label>
-          <a href="#" class="link-muted">نسيت كلمة المرور؟</a>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
-      </form>
-
-      <div class="divider">أو تابع عبر</div>
-      <div class="social-row">
-        <button class="social-btn">Google</button>
-        <button class="social-btn">Apple</button>
-      </div>
-
-      <p class="auth-switch">ليس لديك حساب؟ <a href="register.html" class="link-muted">أنشئ حساباً جديداً</a></p>
-    </div>
-  </div>
 </div>
 
-<script src="script.js"></script>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="site-header">
+
+    <div class="container header-row">
+
+        <a href="index.html"
+           class="brand">
+
+            <span class="brand-mark">
+                م
+            </span>
+
+            <span class="brand-text">
+                أكاديمية المنى
+            </span>
+
+        </a>
+
+
+        <nav class="main-nav">
+
+            <a href="index.html">
+                الرئيسية
+            </a>
+
+            <a href="register.html">
+                تسجيل الطلاب
+            </a>
+
+            <a href="index.html#about">
+                عن الأكاديمية
+            </a>
+
+            <a href="index.html#contact">
+                تواصل معنا
+            </a>
+
+        </nav>
+
+
+        <div class="header-actions">
+
+            <a href="index.html"
+               class="btn btn-small">
+
+                الرئيسية
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<main class="auth-wrap academy-login">
+
+    <div class="register-container">
+
+
+        <!-- =====================
+             SIDE
+        ====================== -->
+
+        <aside class="register-side">
+
+            <div class="register-logo">
+
+                <span class="large-mark">
+                    م
+                </span>
+
+                <h2>
+                    أكاديمية المنى
+                </h2>
+
+                <p>
+                    العلم طريق النجاح
+                </p>
+
+            </div>
+
+
+            <div class="register-message">
+
+                <span class="message-icon">
+                    🔐
+                </span>
+
+                <h3>
+                    لوحة الإدارة
+                </h3>
+
+                <p>
+
+                    هذه الصفحة مخصصة لمالك
+                    الأكاديمية فقط.
+
+                    من هنا يمكنك الدخول إلى
+                    لوحة الإدارة ومتابعة بيانات
+                    الطلاب المسجلين.
+
+                </p>
+
+            </div>
+
+
+            <div class="register-benefits">
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+
+                        <strong>
+                            إدارة الطلاب
+                        </strong>
+
+                        <small>
+                            مشاهدة بيانات الطلاب المسجلين
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+
+                        <strong>
+                            تعديل البيانات
+                        </strong>
+
+                        <small>
+                            تحديث بيانات الطلاب عند الحاجة
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="benefit">
+
+                    <span>✓</span>
+
+                    <div>
+
+                        <strong>
+                            خصوصية الإدارة
+                        </strong>
+
+                        <small>
+                            هذه الصفحة مخصصة للمالك فقط
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================
+             LOGIN FORM
+        ====================== -->
+
+        <section class="auth-form-side">
+
+            <div class="auth-box">
+
+
+                <div class="form-heading">
+
+                    <span class="form-label">
+                        منطقة الإدارة
+                    </span>
+
+                    <h1>
+                        دخول المالك
+                    </h1>
+
+                    <p class="sub">
+
+                        أدخل بيانات الدخول للوصول
+                        إلى لوحة إدارة الطلاب.
+
+                    </p>
+
+                </div>
+
+
+                <form id="owner-login-form"
+                      novalidate>
+
+
+                    <!-- USERNAME -->
+
+                    <div class="field">
+
+                        <label for="owner-username">
+                            اسم المستخدم
+                        </label>
+
+                        <input
+                            type="text"
+                            id="owner-username"
+                            placeholder="اسم المستخدم"
+                            autocomplete="username"
+                            required>
+
+                        <span class="field-error">
+                            يرجى إدخال اسم المستخدم
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="field">
+
+                        <label for="owner-password">
+                            كلمة المرور
+                        </label>
+
+                        <input
+                            type="password"
+                            id="owner-password"
+                            placeholder="••••••••"
+                            autocomplete="current-password"
+                            required>
+
+                        <span class="field-error">
+                            يرجى إدخال كلمة المرور
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- REMEMBER -->
+
+                    <div class="field-row">
+
+                        <label class="remember">
+
+                            <input
+                                type="checkbox"
+                                id="remember-owner">
+
+                            تذكرني
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- LOGIN -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-block">
+
+                        🔐 دخول لوحة الإدارة
+
+                    </button>
+
+
+                </form>
+
+
+                <div class="login-security">
+
+                    <span>
+                        🔒
+                    </span>
+
+                    <p>
+                        هذه الصفحة مخصصة لمالك
+                        الأكاديمية ولا تظهر للطلاب
+                        أثناء عملية التسجيل.
+                    </p>
+
+                </div>
+
+
+                <div class="register-footer">
+
+                    <a href="index.html">
+                        ← العودة إلى الصفحة الرئيسية
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="site-footer">
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+
+            <div class="footer-about">
+
+                <a href="index.html"
+                   class="brand">
+
+                    <span class="brand-mark">
+                        م
+                    </span>
+
+                    <span class="brand-text">
+                        أكاديمية المنى
+                    </span>
+
+                </a>
+
+                <p>
+
+                    أكاديمية المنى —
+                    العلم طريق النجاح.
+
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    روابط سريعة
+                </h5>
+
+                <ul>
+
+                    <li>
+                        <a href="index.html">
+                            الرئيسية
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="register.html">
+                            تسجيل طالب
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    التواصل
+                </h5>
+
+                <ul>
+
+                    <li>
+
+                        <a
+                            href="https://wa.me/201140752330"
+                            target="_blank"
+                            rel="noopener">
+
+                            اتصالات
+                            <br>
+                            +20 114 075 2330
+
+                        </a>
+
+                    </li>
+
+
+                    <li>
+
+                        <a
+                            href="https://wa.me/201061240956"
+                            target="_blank"
+                            rel="noopener">
+
+                            فودافون
+                            <br>
+                            +20 106 124 0956
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>
+                    الإدارة
+                </h5>
+
+                <ul>
+
+                    <li>
+                        دخول المالك
+                    </li>
+
+                    <li>
+                        إدارة الطلاب
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 أكاديمية المنى
+            </span>
+
+            <span>
+                جميع الحقوق محفوظة
+            </span>
+
+            <span class="developer">
+
+                Developed by
+
+                <strong>
+                    yaseen amr abd el rahem
+                </strong>
+
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================
+     OWNER LOGIN SCRIPT
+========================= -->
+
+<script>
+
+document
+    .getElementById("owner-login-form")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const username =
+            document
+            .getElementById("owner-username")
+            .value
+            .trim();
+
+
+        const password =
+            document
+            .getElementById("owner-password")
+            .value;
+
+
+        const remember =
+            document
+            .getElementById("remember-owner")
+            .checked;
+
+
+
+        if (!username || !password) {
+
+            alert(
+                "يرجى إدخال اسم المستخدم وكلمة المرور."
+            );
+
+            return;
+
+        }
+
+
+
+        /*
+        =====================================
+        بيانات المالك
+        =====================================
+
+        غيّر القيمتين هنا إلى بياناتك الخاصة.
+
+        لا تستخدم هذه البيانات في موقع منشور
+        كوسيلة حماية حقيقية، لأن JavaScript
+        داخل المتصفح يمكن للمستخدم رؤيته.
+        =====================================
+        */
+
+        const OWNER_USERNAME =
+            "admin";
+
+
+        const OWNER_PASSWORD =
+            "Almena2026";
+
+
+
+        if (
+            username !== OWNER_USERNAME ||
+            password !== OWNER_PASSWORD
+        ) {
+
+            alert(
+                "اسم المستخدم أو كلمة المرور غير صحيحة."
+            );
+
+            return;
+
+        }
+
+
+
+        /*
+        =====================================
+        إنشاء جلسة المالك
+        =====================================
+        */
+
+        const loginData = {
+
+            loggedIn: true,
+
+            username: username,
+
+            loginTime: new Date().toISOString()
+
+        };
+
+
+        const storageType =
+            remember
+                ? localStorage
+                : sessionStorage;
+
+
+        storageType.setItem(
+            "almena_owner_session",
+            JSON.stringify(loginData)
+        );
+
+
+
+        /*
+        =====================================
+        الانتقال إلى لوحة الإدارة
+        =====================================
+        */
+
+        window.location.href =
+            "admin.html";
+
+    });
+
+</script>
+
+
 </body>
 </html>
