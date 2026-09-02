@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -16,17 +17,15 @@
     <title>تسجيل طالب | أكاديمية المنى</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<!-- =========================
-     TOP BAR
-========================= -->
 
 <div class="top-bar">
 
-    <div class="container">
+    <div class="container top-bar-inner">
 
         <span>
             ✦ أكاديمية المنى
@@ -40,10 +39,6 @@
 
 </div>
 
-
-<!-- =========================
-     HEADER
-========================= -->
 
 <header class="site-header">
 
@@ -86,19 +81,15 @@
         <div class="header-actions">
 
             <a href="login.html"
-               class="icon-btn"
-               title="دخول المالك">
-
-                👤
-
-            </a>
-
-            <a href="login.html"
                class="btn btn-small">
 
                 دخول المالك
 
             </a>
+
+            <button class="nav-toggle">
+                ☰
+            </button>
 
         </div>
 
@@ -107,19 +98,10 @@
 </header>
 
 
+<main class="register-page">
 
-<!-- =========================
-     REGISTER PAGE
-========================= -->
+    <div class="container register-layout">
 
-<main class="auth-wrap academy-register">
-
-    <div class="register-container">
-
-
-        <!-- =====================
-             SIDE INFORMATION
-        ====================== -->
 
         <aside class="register-side">
 
@@ -151,14 +133,9 @@
                 </h3>
 
                 <p>
-
-                    يسعدنا انضمام طالب جديد
-                    إلى أكاديميتنا.
-
-                    يرجى كتابة البيانات
-                    المطلوبة بدقة حتى نستطيع
+                    يسعدنا انضمام طالب جديد إلى أكاديميتنا.
+                    يرجى كتابة البيانات المطلوبة بدقة حتى نستطيع
                     التواصل مع ولي الأمر.
-
                 </p>
 
             </div>
@@ -167,53 +144,29 @@
             <div class="register-benefits">
 
                 <div class="benefit">
-
                     <span>✓</span>
-
                     <div>
-                        <strong>
-                            تسجيل سهل
-                        </strong>
-
-                        <small>
-                            عملية التسجيل بسيطة وسريعة
-                        </small>
+                        <strong>تسجيل سهل</strong>
+                        <small>عملية التسجيل بسيطة وسريعة</small>
                     </div>
-
                 </div>
 
 
                 <div class="benefit">
-
                     <span>✓</span>
-
                     <div>
-                        <strong>
-                            بيانات منظمة
-                        </strong>
-
-                        <small>
-                            يتم حفظ بيانات الطالب بشكل منظم
-                        </small>
+                        <strong>بيانات منظمة</strong>
+                        <small>يتم حفظ بيانات الطالب بشكل منظم</small>
                     </div>
-
                 </div>
 
 
                 <div class="benefit">
-
                     <span>✓</span>
-
                     <div>
-                        <strong>
-                            تواصل مباشر
-                        </strong>
-
-                        <small>
-                            إرسال الطلب مباشرة إلى الإدارة
-                        </small>
+                        <strong>تواصل مباشر</strong>
+                        <small>إرسال الطلب مباشرة إلى الإدارة</small>
                     </div>
-
                 </div>
 
             </div>
@@ -221,14 +174,9 @@
         </aside>
 
 
+        <section class="register-form-wrapper">
 
-        <!-- =====================
-             FORM
-        ====================== -->
-
-        <section class="auth-form-side">
-
-            <div class="auth-box register-box">
+            <div class="register-box">
 
                 <div class="form-heading">
 
@@ -241,34 +189,22 @@
                     </h1>
 
                     <p class="sub">
-
-                        أدخل البيانات التالية بدقة،
-                        ثم اضغط على إتمام التسجيل.
-
+                        أدخل البيانات التالية بدقة، ثم اضغط على إتمام التسجيل.
                     </p>
 
                 </div>
 
 
-                <form id="student-register-form"
-                      novalidate>
+                <form id="student-register-form" novalidate>
 
-
-                    <!-- =================
-                         STUDENT DATA
-                    ================== -->
 
                     <div class="form-section-title">
-
                         <span>01</span>
-
                         بيانات الطالب
-
                     </div>
 
 
                     <div class="form-grid">
-
 
                         <div class="field">
 
@@ -279,9 +215,7 @@
                             <input
                                 type="text"
                                 id="student-name"
-                                name="studentName"
                                 placeholder="اكتب اسم الطالب بالكامل"
-                                autocomplete="name"
                                 required>
 
                             <span class="field-error">
@@ -300,10 +234,9 @@
                             <input
                                 type="number"
                                 id="student-age"
-                                name="studentAge"
-                                placeholder="العمر"
                                 min="3"
                                 max="30"
+                                placeholder="العمر"
                                 required>
 
                             <span class="field-error">
@@ -319,10 +252,7 @@
                                 النوع
                             </label>
 
-                            <select
-                                id="student-gender"
-                                name="studentGender"
-                                required>
+                            <select id="student-gender" required>
 
                                 <option value="">
                                     اختر النوع
@@ -354,7 +284,6 @@
                             <input
                                 type="text"
                                 id="student-class"
-                                name="studentClass"
                                 placeholder="مثال: الصف السادس"
                                 required>
 
@@ -364,26 +293,16 @@
 
                         </div>
 
-
                     </div>
 
 
-
-                    <!-- =================
-                         PARENT DATA
-                    ================== -->
-
                     <div class="form-section-title">
-
                         <span>02</span>
-
                         بيانات ولي الأمر
-
                     </div>
 
 
                     <div class="form-grid">
-
 
                         <div class="field">
 
@@ -394,7 +313,6 @@
                             <input
                                 type="text"
                                 id="parent-name"
-                                name="parentName"
                                 placeholder="اسم ولي الأمر"
                                 required>
 
@@ -414,7 +332,6 @@
                             <input
                                 type="tel"
                                 id="phone"
-                                name="phone"
                                 placeholder="01xxxxxxxxx"
                                 inputmode="tel"
                                 required>
@@ -436,7 +353,6 @@
                             <input
                                 type="tel"
                                 id="extra-phone"
-                                name="extraPhone"
                                 placeholder="01xxxxxxxxx"
                                 inputmode="tel">
 
@@ -449,10 +365,7 @@
                                 صلة القرابة
                             </label>
 
-                            <select
-                                id="relation"
-                                name="relation"
-                                required>
+                            <select id="relation" required>
 
                                 <option value="">
                                     اختر صلة القرابة
@@ -486,26 +399,16 @@
 
                         </div>
 
-
                     </div>
 
 
-
-                    <!-- =================
-                         LOCATION
-                    ================== -->
-
                     <div class="form-section-title">
-
                         <span>03</span>
-
                         بيانات السكن
-
                     </div>
 
 
                     <div class="form-grid">
-
 
                         <div class="field">
 
@@ -516,7 +419,6 @@
                             <input
                                 type="text"
                                 id="governorate"
-                                name="governorate"
                                 placeholder="مثال: القاهرة"
                                 required>
 
@@ -536,7 +438,6 @@
                             <input
                                 type="text"
                                 id="area"
-                                name="area"
                                 placeholder="اسم المنطقة أو المركز"
                                 required>
 
@@ -556,8 +457,7 @@
                             <input
                                 type="text"
                                 id="address"
-                                name="address"
-                                placeholder="الشارع - رقم المنزل - أي تفاصيل مهمة"
+                                placeholder="الشارع - رقم المنزل - تفاصيل إضافية"
                                 required>
 
                             <span class="field-error">
@@ -566,21 +466,12 @@
 
                         </div>
 
-
                     </div>
 
 
-
-                    <!-- =================
-                         EXTRA INFORMATION
-                    ================== -->
-
                     <div class="form-section-title">
-
                         <span>04</span>
-
                         معلومات إضافية
-
                     </div>
 
 
@@ -593,17 +484,11 @@
 
                         <textarea
                             id="notes"
-                            name="notes"
                             rows="4"
-                            placeholder="اكتب أي ملاحظات أو معلومات إضافية تريد إبلاغ الأكاديمية بها"></textarea>
+                            placeholder="أي معلومات إضافية تريد إبلاغ الأكاديمية بها"></textarea>
 
                     </div>
 
-
-
-                    <!-- =================
-                         CONFIRMATION
-                    ================== -->
 
                     <div class="form-confirm">
 
@@ -611,15 +496,13 @@
 
                             <input
                                 type="checkbox"
-                                id="confirm-data"
-                                required>
+                                id="confirm-data">
 
                             <span class="custom-check"></span>
 
                             <span>
-                                أقر بأن البيانات التي أدخلتها
-                                صحيحة وأوافق على إرسالها
-                                إلى إدارة أكاديمية المنى.
+                                أقر بأن البيانات التي أدخلتها صحيحة
+                                وأوافق على إرسالها إلى إدارة أكاديمية المنى.
                             </span>
 
                         </label>
@@ -627,31 +510,19 @@
                     </div>
 
 
-                    <!-- =================
-                         SUBMIT
-                    ================== -->
-
                     <button
                         type="submit"
                         class="btn btn-primary btn-block register-submit">
 
-                        <span>
-                            ✓
-                        </span>
-
-                        إتمام التسجيل وإرسال الطلب
+                        ✓ إتمام التسجيل وإرسال الطلب
 
                     </button>
 
 
                     <p class="form-note">
-
-                        بعد الضغط على إتمام التسجيل
-                        سيتم فتح واتساب وإرسال بيانات
-                        الطالب إلى إدارة الأكاديمية.
-
+                        بعد الضغط على إتمام التسجيل سيتم فتح واتساب
+                        وإرسال بيانات الطالب إلى إدارة الأكاديمية.
                     </p>
-
 
                 </form>
 
@@ -673,141 +544,9 @@
 </main>
 
 
-
-<!-- =========================
-     FOOTER
-========================= -->
-
 <footer class="site-footer">
 
     <div class="container">
-
-        <div class="footer-grid">
-
-
-            <div class="footer-about">
-
-                <a href="index.html"
-                   class="brand">
-
-                    <span class="brand-mark">
-                        م
-                    </span>
-
-                    <span class="brand-text">
-                        أكاديمية المنى
-                    </span>
-
-                </a>
-
-                <p>
-                    العلم طريق النجاح.
-                    نسعى دائماً لتقديم بيئة
-                    تعليمية مميزة لأبنائنا.
-                </p>
-
-            </div>
-
-
-            <div>
-
-                <h5>
-                    روابط سريعة
-                </h5>
-
-                <ul>
-
-                    <li>
-                        <a href="index.html">
-                            الرئيسية
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="register.html">
-                            تسجيل طالب
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="login.html">
-                            دخول المالك
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-
-            <div>
-
-                <h5>
-                    التواصل
-                </h5>
-
-                <ul>
-
-                    <li>
-                        <a
-                            href="https://wa.me/201140752330"
-                            target="_blank"
-                            rel="noopener">
-
-                            اتصالات
-                            <br>
-                            +20 114 075 2330
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a
-                            href="https://wa.me/201061240956"
-                            target="_blank"
-                            rel="noopener">
-
-                            فودافون
-                            <br>
-                            +20 106 124 0956
-
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-
-            <div>
-
-                <h5>
-                    الإدارة
-                </h5>
-
-                <ul>
-
-                    <li>
-                        <a href="login.html">
-                            دخول المالك
-                        </a>
-                    </li>
-
-                    <li>
-                        إدارة الطلاب
-                    </li>
-
-                    <li>
-                        تعديل البيانات
-                    </li>
-
-                </ul>
-
-            </div>
-
-
-        </div>
-
 
         <div class="footer-bottom">
 
@@ -816,17 +555,8 @@
             </span>
 
             <span>
-                جميع الحقوق محفوظة
-            </span>
-
-            <span class="developer">
-
                 Developed by
-
-                <strong>
-                    yaseen amr abd el rahem
-                </strong>
-
+                <strong>yaseen amr abd el rahem</strong>
             </span>
 
         </div>
@@ -836,263 +566,7 @@
 </footer>
 
 
-
-<!-- =========================
-     REGISTRATION SCRIPT
-========================= -->
-
-<script>
-
-document
-    .getElementById("student-register-form")
-    .addEventListener("submit", function (event) {
-
-        event.preventDefault();
-
-
-        const form = event.target;
-
-
-        /*
-        ==============================
-        قراءة البيانات
-        ==============================
-        */
-
-        const studentName =
-            document.getElementById("student-name").value.trim();
-
-        const studentAge =
-            document.getElementById("student-age").value.trim();
-
-        const studentGender =
-            document.getElementById("student-gender").value;
-
-        const studentClass =
-            document.getElementById("student-class").value.trim();
-
-
-        const parentName =
-            document.getElementById("parent-name").value.trim();
-
-        const phone =
-            document.getElementById("phone").value.trim();
-
-        const extraPhone =
-            document.getElementById("extra-phone").value.trim();
-
-        const relation =
-            document.getElementById("relation").value;
-
-
-        const governorate =
-            document.getElementById("governorate").value.trim();
-
-        const area =
-            document.getElementById("area").value.trim();
-
-        const address =
-            document.getElementById("address").value.trim();
-
-
-        const notes =
-            document.getElementById("notes").value.trim();
-
-
-        const confirmed =
-            document.getElementById("confirm-data").checked;
-
-
-
-        /*
-        ==============================
-        التحقق
-        ==============================
-        */
-
-        if (
-            !studentName ||
-            !studentAge ||
-            !studentGender ||
-            !studentClass ||
-            !parentName ||
-            !phone ||
-            !relation ||
-            !governorate ||
-            !area ||
-            !address ||
-            !confirmed
-        ) {
-
-            alert(
-                "يرجى إكمال جميع البيانات المطلوبة والموافقة على صحة البيانات."
-            );
-
-            return;
-
-        }
-
-
-
-        /*
-        ==============================
-        حفظ الطالب محلياً
-        ==============================
-        */
-
-        const student = {
-
-            id:
-                Date.now(),
-
-            studentName:
-                studentName,
-
-            studentAge:
-                studentAge,
-
-            studentGender:
-                studentGender,
-
-            studentClass:
-                studentClass,
-
-            parentName:
-                parentName,
-
-            phone:
-                phone,
-
-            extraPhone:
-                extraPhone,
-
-            relation:
-                relation,
-
-            governorate:
-                governorate,
-
-            area:
-                area,
-
-            address:
-                address,
-
-            notes:
-                notes,
-
-            createdAt:
-                new Date().toISOString()
-
-        };
-
-
-        let students = [];
-
-
-        try {
-
-            students =
-                JSON.parse(
-                    localStorage.getItem("academy_students")
-                ) || [];
-
-        } catch (error) {
-
-            students = [];
-
-        }
-
-
-        students.push(student);
-
-
-        localStorage.setItem(
-            "academy_students",
-            JSON.stringify(students)
-        );
-
-
-
-        /*
-        ==============================
-        إنشاء رسالة واتساب
-        ==============================
-        */
-
-        const message =
-
-`🎓 *طلب تسجيل طالب جديد*
-*أكاديمية المنى*
-
-━━━━━━━━━━━━━━
-
-👨‍🎓 *بيانات الطالب*
-
-الاسم: ${studentName}
-العمر: ${studentAge}
-النوع: ${studentGender}
-الصف الدراسي: ${studentClass}
-
-━━━━━━━━━━━━━━
-
-👨‍👩‍👦 *بيانات ولي الأمر*
-
-الاسم: ${parentName}
-صلة القرابة: ${relation}
-رقم الهاتف: ${phone}
-رقم إضافي: ${extraPhone || "غير موجود"}
-
-━━━━━━━━━━━━━━
-
-📍 *بيانات السكن*
-
-المحافظة: ${governorate}
-المنطقة / المركز: ${area}
-العنوان: ${address}
-
-━━━━━━━━━━━━━━
-
-📝 *ملاحظات*
-
-${notes || "لا توجد ملاحظات"}
-
-━━━━━━━━━━━━━━
-
-✅ تم إرسال الطلب من موقع أكاديمية المنى.`;
-
-
-        /*
-        ==============================
-        رقم واتساب الأكاديمية
-        ==============================
-        */
-
-        const whatsappNumber =
-            "201140752330";
-
-
-        const whatsappURL =
-            "https://wa.me/" +
-            whatsappNumber +
-            "?text=" +
-            encodeURIComponent(message);
-
-
-
-        /*
-        ==============================
-        فتح واتساب
-        ==============================
-        */
-
-        window.location.href =
-            whatsappURL;
-
-    });
-
-</script>
-
+<script src="script.js"></script>
 
 </body>
 </html>
