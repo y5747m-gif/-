@@ -1,44 +1,42 @@
-/* =========================================================
+/* =====================================================
    أكاديمية المنى
-   Main JavaScript
-   ========================================================= */
+   النظام الرئيسي للموقع
+===================================================== */
+
+const STUDENTS_KEY = "academy_students";
+const OWNER_SESSION = "academy_owner_logged_in";
 
 
-/* =========================================================
-   إعدادات الأكاديمية
-   ========================================================= */
+/* =====================================================
+   أدوات عامة
+===================================================== */
 
-const ACADEMY_CONFIG = {
+function getStudents() {
 
-    name: "أكاديمية المنى",
+    try {
 
-    developer: "yaseen amr abd el rahem",
+        return JSON.parse(
+            localStorage.getItem(STUDENTS_KEY)
+        ) || [];
 
-    studentsKey: "almena_students",
+    } catch (error) {
 
-    ownerSessionKey: "almena_owner_session",
+        return [];
 
-    whatsappEtisalat: "201140752330",
+    }
 
-    whatsappVodafone: "201061240956"
-
-};
-
-
-/* =========================================================
-   أدوات مساعدة
-   ========================================================= */
-
-const $ = (selector) =>
-    document.querySelector(selector);
-
-const $$ = (selector) =>
-    [...document.querySelectorAll(selector)];
+}
 
 
-/* =========================================================
-   Toast
-   ========================================================= */
+function saveStudents(students) {
+
+    localStorage.setItem(
+        STUDENTS_KEY,
+        JSON.stringify(students)
+    );
+
+}
+
 
 function showToast(message) {
 
@@ -58,23 +56,22 @@ function showToast(message) {
 
     toast.classList.add("show");
 
-    clearTimeout(window.__academyToastTimer);
+    clearTimeout(window.toastTimer);
 
-    window.__academyToastTimer =
-        setTimeout(() => {
+    window.toastTimer = setTimeout(() => {
 
-            toast.classList.remove("show");
+        toast.classList.remove("show");
 
-        }, 2800);
+    }, 3000);
 
 }
 
 
-/* =========================================================
-   القائمة الرئيسية
-   ========================================================= */
+/* =====================================================
+   القائمة في الهاتف
+===================================================== */
 
-function initNavToggle() {
+function initNavigation() {
 
     const toggle =
         document.querySelector(".nav-toggle");
@@ -82,10 +79,7 @@ function initNavToggle() {
     const nav =
         document.querySelector(".main-nav");
 
-
-    if (!toggle || !nav)
-        return;
-
+    if (!toggle || !nav) return;
 
     toggle.addEventListener("click", () => {
 
@@ -93,265 +87,53 @@ function initNavToggle() {
 
     });
 
-
-    $$(".main-nav a").forEach(link => {
-
-        link.addEventListener("click", () => {
-
-            nav.classList.remove("open");
-
-        });
-
-    });
-
 }
 
 
-/* =========================================================
-   الطلاب
-   ========================================================= */
-
-function getStudents() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                ACADEMY_CONFIG.studentsKey
-            )
-        ) || [];
-
-    } catch (error) {
-
-        console.error(
-            "خطأ في قراءة بيانات الطلاب:",
-            error
-        );
-
-        return [];
-
-    }
-
-}
-
-
-function saveStudents(students) {
-
-    localStorage.setItem(
-        ACADEMY_CONFIG.studentsKey,
-        JSON.stringify(students)
-    );
-
-}
-
-
-/* =========================================================
-   توليد رقم طالب
-   ========================================================= */
-
-function generateStudentId() {
-
-    return "ST-" +
-        Date.now().toString().slice(-8);
-
-}
-
-
-/* =========================================================
-   تسجيل طالب جديد
-   ========================================================= */
-
-function registerStudent(studentData) {
-
-    const students =
-        getStudents();
-
-
-    const student = {
-
-        id: generateStudentId(),
-
-        name: studentData.name || "",
-
-        phone: studentData.phone || "",
-
-        additionalPhone:
-            studentData.additionalPhone || "",
-
-        address:
-            studentData.address || "",
-
-        age:
-            studentData.age || "",
-
-        grade:
-            studentData.grade || "",
-
-        parentName:
-            studentData.parentName || "",
-
-        parentPhone:
-            studentData.parentPhone || "",
-
-        notes:
-            studentData.notes || "",
-
-        registrationDate:
-            new Date().toISOString()
-
-    };
-
-
-    students.push(student);
-
-    saveStudents(students);
-
-    return student;
-
-}
-
-
-/* =========================================================
-   تحديث بيانات طالب
-   ========================================================= */
-
-function updateStudent(id, updatedData) {
-
-    const students =
-        getStudents();
-
-
-    const index =
-        students.findIndex(
-            student => student.id === id
-        );
-
-
-    if (index === -1)
-        return false;
-
-
-    students[index] = {
-
-        ...students[index],
-
-        ...updatedData,
-
-        updatedAt:
-            new Date().toISOString()
-
-    };
-
-
-    saveStudents(students);
-
-    return true;
-
-}
-
-
-/* =========================================================
-   حذف طالب
-   ========================================================= */
-
-function deleteStudent(id) {
-
-    const students =
-        getStudents();
-
-
-    const filtered =
-        students.filter(
-            student => student.id !== id
-        );
-
-
-    saveStudents(filtered);
-
-    return true;
-
-}
-
-
-/* =========================================================
-   عدد الطلاب
-   ========================================================= */
-
-function getStudentCount() {
-
-    return getStudents().length;
-
-}
-
+/* =====================================================
+   عداد الطلاب
+===================================================== */
 
 function updateStudentCounters() {
 
-    const count =
-        getStudentCount();
+    const students = getStudents();
 
+    const homeCounter =
+        document.getElementById("student-count");
 
-    $$("[data-student-count]").forEach(el => {
+    const adminCounter =
+        document.getElementById("admin-student-count");
 
-        el.textContent =
-            count.toLocaleString("ar-EG");
+    if (homeCounter) {
 
-    });
-
-}
-
-
-/* =========================================================
-   التحقق من البريد الإلكتروني
-   ========================================================= */
-
-function isValidEmail(email) {
-
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(email);
-
-}
-
-
-/* =========================================================
-   التحقق من الحقول
-   ========================================================= */
-
-function validateField(
-    field,
-    condition,
-    message
-) {
-
-    if (!field)
-        return false;
-
-
-    const error =
-        field.querySelector(".field-error");
-
-
-    if (!condition) {
-
-        field.classList.add("invalid");
-
-        if (error)
-            error.textContent = message;
-
-        return false;
+        homeCounter.textContent =
+            students.length;
 
     }
 
+    if (adminCounter) {
 
-    field.classList.remove("invalid");
+        adminCounter.textContent =
+            students.length;
 
-    return true;
+    }
+
+    const lastStudent =
+        document.getElementById("last-student");
+
+    if (lastStudent && students.length) {
+
+        lastStudent.textContent =
+            students[students.length - 1].studentName;
+
+    }
 
 }
 
 
-/* =========================================================
-   نموذج تسجيل الطالب
-   ========================================================= */
+/* =====================================================
+   تسجيل الطالب
+===================================================== */
 
 function initStudentRegistration() {
 
@@ -360,325 +142,366 @@ function initStudentRegistration() {
             "student-register-form"
         );
 
-
-    if (!form)
-        return;
+    if (!form) return;
 
 
-    form.addEventListener(
-        "submit",
-        function(event) {
+    form.addEventListener("submit", function(event) {
 
-            event.preventDefault();
+        event.preventDefault();
 
 
-            const formData =
-                new FormData(form);
+        const studentName =
+            document.getElementById("student-name").value.trim();
+
+        const studentAge =
+            document.getElementById("student-age").value.trim();
+
+        const studentGender =
+            document.getElementById("student-gender").value;
+
+        const studentClass =
+            document.getElementById("student-class").value.trim();
 
 
-            const student = {
+        const parentName =
+            document.getElementById("parent-name").value.trim();
 
-                name:
-                    String(
-                        formData.get("name") || ""
-                    ).trim(),
+        const phone =
+            document.getElementById("phone").value.trim();
 
-                phone:
-                    String(
-                        formData.get("phone") || ""
-                    ).trim(),
+        const extraPhone =
+            document.getElementById("extra-phone").value.trim();
 
-                additionalPhone:
-                    String(
-                        formData.get(
-                            "additionalPhone"
-                        ) || ""
-                    ).trim(),
-
-                address:
-                    String(
-                        formData.get("address") || ""
-                    ).trim(),
-
-                age:
-                    String(
-                        formData.get("age") || ""
-                    ).trim(),
-
-                grade:
-                    String(
-                        formData.get("grade") || ""
-                    ).trim(),
-
-                parentName:
-                    String(
-                        formData.get(
-                            "parentName"
-                        ) || ""
-                    ).trim(),
-
-                parentPhone:
-                    String(
-                        formData.get(
-                            "parentPhone"
-                        ) || ""
-                    ).trim(),
-
-                notes:
-                    String(
-                        formData.get("notes") || ""
-                    ).trim()
-
-            };
+        const relation =
+            document.getElementById("relation").value;
 
 
-            /* =========================
-               التحقق
-            ========================= */
+        const governorate =
+            document.getElementById("governorate").value.trim();
 
-            if (student.name.length < 3) {
+        const area =
+            document.getElementById("area").value.trim();
 
-                showToast(
-                    "يرجى كتابة اسم الطالب بشكل صحيح"
-                );
+        const address =
+            document.getElementById("address").value.trim();
 
-                return;
-
-            }
+        const notes =
+            document.getElementById("notes").value.trim();
 
 
-            if (student.phone.length < 8) {
-
-                showToast(
-                    "يرجى كتابة رقم الهاتف بشكل صحيح"
-                );
-
-                return;
-
-            }
+        const confirmed =
+            document.getElementById("confirm-data").checked;
 
 
-            if (!student.address) {
+        /* =============================
+           التحقق
+        ============================= */
 
-                showToast(
-                    "يرجى كتابة مكان السكن"
-                );
+        if (!studentName) {
 
-                return;
+            showToast("يرجى إدخال اسم الطالب");
 
-            }
+            return;
 
-
-            /* =========================
-               حفظ الطالب
-            ========================= */
-
-            const savedStudent =
-                registerStudent(student);
+        }
 
 
-            /* =========================
-               رسالة واتساب
-            ========================= */
+        if (
+            !studentAge ||
+            Number(studentAge) < 3 ||
+            Number(studentAge) > 30
+        ) {
 
-            sendStudentToWhatsApp(
-                savedStudent
+            showToast("يرجى إدخال عمر صحيح");
+
+            return;
+
+        }
+
+
+        if (!studentGender) {
+
+            showToast("يرجى اختيار النوع");
+
+            return;
+
+        }
+
+
+        if (!studentClass) {
+
+            showToast("يرجى إدخال الصف الدراسي");
+
+            return;
+
+        }
+
+
+        if (!parentName) {
+
+            showToast("يرجى إدخال اسم ولي الأمر");
+
+            return;
+
+        }
+
+
+        if (!phone) {
+
+            showToast("يرجى إدخال رقم الهاتف");
+
+            return;
+
+        }
+
+
+        if (!relation) {
+
+            showToast("يرجى اختيار صلة القرابة");
+
+            return;
+
+        }
+
+
+        if (!governorate || !area || !address) {
+
+            showToast(
+                "يرجى إكمال بيانات السكن"
+            );
+
+            return;
+
+        }
+
+
+        if (!confirmed) {
+
+            showToast(
+                "يجب الموافقة على صحة البيانات"
+            );
+
+            return;
+
+        }
+
+
+        /* =============================
+           إنشاء الطالب
+        ============================= */
+
+        const student = {
+
+            id: Date.now(),
+
+            studentName,
+
+            studentAge,
+
+            studentGender,
+
+            studentClass,
+
+            parentName,
+
+            phone,
+
+            extraPhone,
+
+            relation,
+
+            governorate,
+
+            area,
+
+            address,
+
+            notes,
+
+            createdAt:
+                new Date().toISOString()
+
+        };
+
+
+        const students = getStudents();
+
+        students.push(student);
+
+        saveStudents(students);
+
+
+        /* =============================
+           رسالة واتساب
+        ============================= */
+
+        const message =
+
+`🎓 *طلب تسجيل طالب جديد*
+*أكاديمية المنى*
+
+━━━━━━━━━━━━━━━━
+
+👨‍🎓 *بيانات الطالب*
+
+الاسم: ${studentName}
+العمر: ${studentAge}
+النوع: ${studentGender}
+الصف الدراسي: ${studentClass}
+
+━━━━━━━━━━━━━━━━
+
+👨‍👩‍👦 *بيانات ولي الأمر*
+
+الاسم: ${parentName}
+صلة القرابة: ${relation}
+الهاتف الأساسي: ${phone}
+رقم إضافي: ${extraPhone || "غير موجود"}
+
+━━━━━━━━━━━━━━━━
+
+📍 *بيانات السكن*
+
+المحافظة: ${governorate}
+المنطقة / المركز: ${area}
+العنوان: ${address}
+
+━━━━━━━━━━━━━━━━
+
+📝 *ملاحظات*
+
+${notes || "لا توجد ملاحظات"}
+
+━━━━━━━━━━━━━━━━
+
+✅ تم إرسال الطلب من موقع أكاديمية المنى.`;
+
+
+        const whatsappNumber =
+            "201140752330";
+
+
+        const whatsappURL =
+            "https://wa.me/" +
+            whatsappNumber +
+            "?text=" +
+            encodeURIComponent(message);
+
+
+        showToast(
+            "تم حفظ الطلب، جاري فتح واتساب..."
+        );
+
+
+        setTimeout(() => {
+
+            window.location.href =
+                whatsappURL;
+
+        }, 700);
+
+    });
+
+}
+
+
+/* =====================================================
+   تسجيل دخول المالك
+===================================================== */
+
+/*
+   غيّر بيانات الدخول هنا.
+   
+   اسم المستخدم:
+   owner
+   
+   كلمة المرور:
+   Almona@2026
+*/
+
+const OWNER_USERNAME = "owner";
+const OWNER_PASSWORD = "Almona@2026";
+
+
+function initOwnerLogin() {
+
+    const form =
+        document.getElementById(
+            "owner-login-form"
+        );
+
+    if (!form) return;
+
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const username =
+            document.getElementById(
+                "owner-username"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "owner-password"
+            ).value;
+
+
+        const error =
+            document.getElementById(
+                "login-error"
+            );
+
+
+        if (
+            username === OWNER_USERNAME &&
+            password === OWNER_PASSWORD
+        ) {
+
+            localStorage.setItem(
+                OWNER_SESSION,
+                "true"
             );
 
 
             showToast(
-                "تم تسجيل الطالب بنجاح ✓"
+                "تم تسجيل الدخول بنجاح"
             );
 
 
-            form.reset();
+            setTimeout(() => {
+
+                window.location.href =
+                    "admin.html";
+
+            }, 700);
 
 
-            updateStudentCounters();
+        } else {
+
+            if (error) {
+
+                error.classList.add("show");
+
+            }
+
+            showToast(
+                "اسم المستخدم أو كلمة المرور غير صحيحة"
+            );
 
         }
 
-    );
+    });
 
 }
 
 
-/* =========================================================
-   إنشاء رسالة الطالب للواتساب
-   ========================================================= */
-
-function createStudentWhatsAppMessage(student) {
-
-    let message =
-
-        `🎓 *تسجيل طالب جديد - ${ACADEMY_CONFIG.name}*%0A` +
-        `%0A` +
-
-        `👤 *اسم الطالب:* ${student.name}%0A` +
-
-        `📞 *رقم الهاتف:* ${student.phone}%0A` +
-
-        `📱 *رقم إضافي:* ${
-            student.additionalPhone || "غير موجود"
-        }%0A` +
-
-        `📍 *العنوان:* ${student.address}%0A` +
-
-        `🎂 *العمر:* ${
-            student.age || "غير محدد"
-        }%0A` +
-
-        `📚 *الصف:* ${
-            student.grade || "غير محدد"
-        }%0A` +
-
-        `👨‍👩‍👦 *اسم ولي الأمر:* ${
-            student.parentName || "غير محدد"
-        }%0A` +
-
-        `☎️ *رقم ولي الأمر:* ${
-            student.parentPhone || "غير محدد"
-        }%0A` +
-
-        `📝 *ملاحظات:* ${
-            student.notes || "لا توجد"
-        }%0A` +
-
-        `%0A` +
-
-        `🆔 *رقم التسجيل:* ${student.id}%0A` +
-
-        `📅 *تاريخ التسجيل:* ${
-            new Date(
-                student.registrationDate
-            ).toLocaleString("ar-EG")
-        }`;
-
-
-    return message;
-
-}
-
-
-/* =========================================================
-   إرسال التسجيل عبر واتساب
-   ========================================================= */
-
-function sendStudentToWhatsApp(student) {
-
-    const message =
-        createStudentWhatsAppMessage(student);
-
-
-    /*
-       نرسل الطلب إلى رقم اتصالات
-       ويمكن تغييره إلى فودافون بسهولة.
-    */
-
-    const phone =
-        ACADEMY_CONFIG.whatsappEtisalat;
-
-
-    const url =
-        `https://wa.me/${phone}?text=${message}`;
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-}
-
-
-/* =========================================================
-   إرسال إلى رقم فودافون
-   ========================================================= */
-
-function sendStudentToVodafone(student) {
-
-    const message =
-        createStudentWhatsAppMessage(student);
-
-
-    const phone =
-        ACADEMY_CONFIG.whatsappVodafone;
-
-
-    const url =
-        `https://wa.me/${phone}?text=${message}`;
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-}
-
-
-/* =========================================================
-   جلسة المالك
-   ========================================================= */
-
-function getOwnerSession() {
-
-    try {
-
-        const localSession =
-            localStorage.getItem(
-                ACADEMY_CONFIG.ownerSessionKey
-            );
-
-
-        if (localSession)
-            return JSON.parse(localSession);
-
-
-        const session =
-            sessionStorage.getItem(
-                ACADEMY_CONFIG.ownerSessionKey
-            );
-
-
-        if (session)
-            return JSON.parse(session);
-
-
-        return null;
-
-    } catch (error) {
-
-        return null;
-
-    }
-
-}
-
-
-/* =========================================================
-   التحقق من دخول المالك
-   ========================================================= */
-
-function isOwnerLoggedIn() {
-
-    const session =
-        getOwnerSession();
-
-
-    return !!(
-        session &&
-        session.loggedIn === true
-    );
-
-}
-
-
-/* =========================================================
+/* =====================================================
    حماية لوحة الإدارة
-   ========================================================= */
+===================================================== */
 
 function protectAdminPage() {
 
@@ -687,17 +510,16 @@ function protectAdminPage() {
             "admin-page"
         );
 
-
-    const isAdminFile =
-        window.location.pathname
-            .toLowerCase()
-            .includes("admin.html");
+    if (!isAdminPage) return;
 
 
-    if (
-        (isAdminPage || isAdminFile) &&
-        !isOwnerLoggedIn()
-    ) {
+    const loggedIn =
+        localStorage.getItem(
+            OWNER_SESSION
+        ) === "true";
+
+
+    if (!loggedIn) {
 
         window.location.href =
             "login.html";
@@ -707,338 +529,253 @@ function protectAdminPage() {
 }
 
 
-/* =========================================================
-   تسجيل خروج المالك
-   ========================================================= */
-
-function ownerLogout() {
-
-    localStorage.removeItem(
-        ACADEMY_CONFIG.ownerSessionKey
-    );
-
-
-    sessionStorage.removeItem(
-        ACADEMY_CONFIG.ownerSessionKey
-    );
-
-
-    window.location.href =
-        "login.html";
-
-}
-
-
-/* =========================================================
-   زر تسجيل الخروج
-   ========================================================= */
+/* =====================================================
+   تسجيل الخروج
+===================================================== */
 
 function initLogout() {
 
-    const buttons =
-        $$("[data-owner-logout]");
-
-
-    buttons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-                ownerLogout();
-
-            }
+    const button =
+        document.getElementById(
+            "logout-btn"
         );
 
-    });
-
-}
+    if (!button) return;
 
 
-/* =========================================================
-   عرض بيانات المالك
-   ========================================================= */
+    button.addEventListener("click", () => {
 
-function updateOwnerInfo() {
+        localStorage.removeItem(
+            OWNER_SESSION
+        );
 
-    const session =
-        getOwnerSession();
-
-
-    if (!session)
-        return;
-
-
-    $$("[data-owner-name]").forEach(el => {
-
-        el.textContent =
-            session.username || "المالك";
+        window.location.href =
+            "login.html";
 
     });
 
 }
 
 
-/* =========================================================
-   إحصائيات لوحة الإدارة
-   ========================================================= */
+/* =====================================================
+   رسم جدول الطلاب
+===================================================== */
 
-function updateAdminStats() {
+function renderStudents(search = "") {
+
+    const tableBody =
+        document.getElementById(
+            "students-table-body"
+        );
+
+    const empty =
+        document.getElementById(
+            "empty-students"
+        );
+
+    if (!tableBody) return;
+
 
     const students =
         getStudents();
 
 
-    $$("[data-total-students]").forEach(el => {
-
-        el.textContent =
-            students.length
-                .toLocaleString("ar-EG");
-
-    });
+    const query =
+        search.trim().toLowerCase();
 
 
-    $$("[data-today-students]").forEach(el => {
+    const filtered =
+        students.filter(student => {
 
-        const today =
-            new Date()
-                .toISOString()
-                .split("T")[0];
+            const text = (
 
+                student.studentName +
+                " " +
+                student.parentName +
+                " " +
+                student.phone +
+                " " +
+                student.studentClass +
+                " " +
+                student.governorate
 
-        const count =
-            students.filter(student => {
-
-                return student.registrationDate &&
-                    student.registrationDate
-                        .startsWith(today);
-
-            }).length;
-
-
-        el.textContent =
-            count.toLocaleString("ar-EG");
-
-    });
-
-}
+            ).toLowerCase();
 
 
-/* =========================================================
-   البحث عن الطلاب
-   ========================================================= */
+            return text.includes(query);
 
-function searchStudents(query) {
-
-    const students =
-        getStudents();
+        });
 
 
-    const value =
-        String(query || "")
-            .trim()
-            .toLowerCase();
+    tableBody.innerHTML = "";
 
 
-    if (!value)
-        return students;
+    if (!filtered.length) {
 
+        if (empty) {
 
-    return students.filter(student => {
+            empty.style.display =
+                "block";
 
-        return (
-
-            String(student.name)
-                .toLowerCase()
-                .includes(value)
-
-            ||
-
-            String(student.phone)
-                .toLowerCase()
-                .includes(value)
-
-            ||
-
-            String(student.id)
-                .toLowerCase()
-                .includes(value)
-
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   عرض الطلاب داخل الجدول
-   ========================================================= */
-
-function renderStudentsTable(
-    container,
-    students = getStudents()
-) {
-
-    if (!container)
-        return;
-
-
-    if (!students.length) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-icon">
-                    👨‍🎓
-                </div>
-
-                <h3>
-                    لا يوجد طلاب حتى الآن
-                </h3>
-
-                <p>
-                    عند تسجيل طالب جديد
-                    سيظهر هنا.
-                </p>
-
-            </div>
-
-        `;
+        }
 
         return;
 
     }
 
 
-    container.innerHTML = students
-        .map(student => `
+    if (empty) {
 
-            <div
-                class="student-row"
-                data-student-id="${student.id}">
+        empty.style.display =
+            "none";
 
-                <div>
-                    <strong>
-                        ${escapeHTML(student.name)}
-                    </strong>
-
-                    <small>
-                        ${escapeHTML(student.id)}
-                    </small>
-                </div>
+    }
 
 
-                <div>
-                    ${escapeHTML(student.phone)}
-                </div>
+    filtered.forEach((student, index) => {
+
+        const row =
+            document.createElement("tr");
 
 
-                <div>
-                    ${escapeHTML(
-                        student.grade || "-"
-                    )}
-                </div>
+        row.innerHTML = `
 
+            <td>
+                ${index + 1}
+            </td>
 
-                <div>
-                    ${escapeHTML(
-                        student.address || "-"
-                    )}
-                </div>
+            <td>
+                <strong>
+                    ${escapeHTML(student.studentName)}
+                </strong>
 
+                <small>
+                    ${escapeHTML(student.studentGender)}
+                </small>
+            </td>
 
-                <div class="student-actions">
+            <td>
+                ${escapeHTML(student.studentAge)}
+            </td>
+
+            <td>
+                ${escapeHTML(student.studentClass)}
+            </td>
+
+            <td>
+                ${escapeHTML(student.parentName)}
+            </td>
+
+            <td>
+                ${escapeHTML(student.phone)}
+            </td>
+
+            <td>
+                ${escapeHTML(student.governorate)}
+            </td>
+
+            <td>
+
+                <div class="table-actions">
 
                     <button
-                        type="button"
-                        data-edit-student="${student.id}">
-
+                        class="action-edit"
+                        data-id="${student.id}">
                         تعديل
-
                     </button>
 
-
                     <button
-                        type="button"
-                        data-delete-student="${student.id}">
-
+                        class="action-delete"
+                        data-id="${student.id}">
                         حذف
-
                     </button>
 
                 </div>
 
-            </div>
+            </td>
 
-        `)
-        .join("");
+        `;
 
 
-    initStudentTableActions();
+        tableBody.appendChild(row);
+
+    });
+
+
+    bindStudentActions();
 
 }
 
 
-/* =========================================================
-   حماية النصوص
-   ========================================================= */
+/* =====================================================
+   حماية النصوص داخل HTML
+===================================================== */
 
 function escapeHTML(value) {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* =========================================================
-   أزرار جدول الطلاب
-   ========================================================= */
+/* =====================================================
+   أزرار تعديل وحذف
+===================================================== */
 
-function initStudentTableActions() {
+function bindStudentActions() {
 
-    $$("[data-delete-student]")
+    document
+        .querySelectorAll(".action-delete")
         .forEach(button => {
 
             button.addEventListener(
                 "click",
-                function() {
+                () => {
 
                     const id =
-                        this.dataset.deleteStudent;
+                        Number(
+                            button.dataset.id
+                        );
+
+
+                    const students =
+                        getStudents();
+
+
+                    const student =
+                        students.find(
+                            item => item.id === id
+                        );
+
+
+                    if (!student) return;
 
 
                     const confirmed =
                         confirm(
-                            "هل تريد حذف هذا الطالب؟"
+                            `هل تريد حذف الطالب "${student.studentName}"؟`
                         );
 
 
-                    if (!confirmed)
-                        return;
+                    if (!confirmed) return;
 
 
-                    deleteStudent(id);
-
-                    renderStudentsTable(
-                        document.querySelector(
-                            "[data-students-table]"
-                        )
-                    );
+                    const updated =
+                        students.filter(
+                            item => item.id !== id
+                        );
 
 
-                    updateAdminStats();
+                    saveStudents(updated);
+
+                    renderStudents();
 
                     updateStudentCounters();
-
 
                     showToast(
                         "تم حذف الطالب"
@@ -1050,28 +787,19 @@ function initStudentTableActions() {
         });
 
 
-    $$("[data-edit-student]")
+    document
+        .querySelectorAll(".action-edit")
         .forEach(button => {
 
             button.addEventListener(
                 "click",
-                function() {
+                () => {
 
-                    const id =
-                        this.dataset.editStudent;
-
-
-                    const student =
-                        getStudents().find(
-                            item => item.id === id
-                        );
-
-
-                    if (!student)
-                        return;
-
-
-                    openStudentEdit(student);
+                    openEditModal(
+                        Number(
+                            button.dataset.id
+                        )
+                    );
 
                 }
             );
@@ -1081,159 +809,388 @@ function initStudentTableActions() {
 }
 
 
-/* =========================================================
-   تعديل الطالب
-   ========================================================= */
+/* =====================================================
+   نافذة تعديل الطالب
+===================================================== */
 
-function openStudentEdit(student) {
+function openEditModal(id) {
 
-    const name =
-        prompt(
-            "اسم الطالب:",
-            student.name
+    const students =
+        getStudents();
+
+
+    const student =
+        students.find(
+            item => item.id === id
         );
 
 
-    if (name === null)
-        return;
+    if (!student) return;
 
 
-    const phone =
-        prompt(
-            "رقم الهاتف:",
-            student.phone
+    document.getElementById("edit-id").value =
+        student.id;
+
+    document.getElementById("edit-name").value =
+        student.studentName;
+
+    document.getElementById("edit-age").value =
+        student.studentAge;
+
+    document.getElementById("edit-gender").value =
+        student.studentGender;
+
+    document.getElementById("edit-class").value =
+        student.studentClass;
+
+    document.getElementById("edit-parent").value =
+        student.parentName;
+
+    document.getElementById("edit-phone").value =
+        student.phone;
+
+    document.getElementById("edit-extra-phone").value =
+        student.extraPhone || "";
+
+    document.getElementById("edit-relation").value =
+        student.relation;
+
+    document.getElementById("edit-governorate").value =
+        student.governorate;
+
+    document.getElementById("edit-area").value =
+        student.area;
+
+    document.getElementById("edit-address").value =
+        student.address;
+
+    document.getElementById("edit-notes").value =
+        student.notes || "";
+
+
+    const modal =
+        document.getElementById(
+            "edit-modal"
         );
 
 
-    if (phone === null)
-        return;
+    if (modal) {
 
+        modal.classList.add("show");
 
-    const address =
-        prompt(
-            "العنوان:",
-            student.address
-        );
-
-
-    if (address === null)
-        return;
-
-
-    updateStudent(
-        student.id,
-        {
-
-            name: name.trim(),
-
-            phone: phone.trim(),
-
-            address: address.trim()
-
-        }
-    );
-
-
-    renderStudentsTable(
-        document.querySelector(
-            "[data-students-table]"
-        )
-    );
-
-
-    updateAdminStats();
-
-    updateStudentCounters();
-
-
-    showToast(
-        "تم تعديل بيانات الطالب ✓"
-    );
+    }
 
 }
 
 
-/* =========================================================
-   البحث في لوحة الإدارة
-   ========================================================= */
+/* =====================================================
+   حفظ تعديل الطالب
+===================================================== */
 
-function initStudentSearch() {
+function initEditForm() {
 
-    const input =
-        document.querySelector(
-            "[data-student-search]"
+    const form =
+        document.getElementById(
+            "edit-student-form"
         );
 
-
-    const table =
-        document.querySelector(
-            "[data-students-table]"
-        );
+    if (!form) return;
 
 
-    if (!input || !table)
-        return;
+    form.addEventListener("submit", event => {
+
+        event.preventDefault();
 
 
-    input.addEventListener(
-        "input",
-        function() {
-
-            const results =
-                searchStudents(
-                    this.value
-                );
-
-
-            renderStudentsTable(
-                table,
-                results
+        const id =
+            Number(
+                document.getElementById(
+                    "edit-id"
+                ).value
             );
 
-        }
-    );
 
-}
+        const students =
+            getStudents();
 
 
-/* =========================================================
-   تشغيل النظام
-   ========================================================= */
+        const index =
+            students.findIndex(
+                item => item.id === id
+            );
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
 
-        initNavToggle();
+        if (index === -1) return;
 
-        initStudentRegistration();
 
-        initLogout();
+        students[index] = {
+
+            ...students[index],
+
+            studentName:
+                document.getElementById(
+                    "edit-name"
+                ).value.trim(),
+
+            studentAge:
+                document.getElementById(
+                    "edit-age"
+                ).value.trim(),
+
+            studentGender:
+                document.getElementById(
+                    "edit-gender"
+                ).value,
+
+            studentClass:
+                document.getElementById(
+                    "edit-class"
+                ).value.trim(),
+
+            parentName:
+                document.getElementById(
+                    "edit-parent"
+                ).value.trim(),
+
+            phone:
+                document.getElementById(
+                    "edit-phone"
+                ).value.trim(),
+
+            extraPhone:
+                document.getElementById(
+                    "edit-extra-phone"
+                ).value.trim(),
+
+            relation:
+                document.getElementById(
+                    "edit-relation"
+                ).value.trim(),
+
+            governorate:
+                document.getElementById(
+                    "edit-governorate"
+                ).value.trim(),
+
+            area:
+                document.getElementById(
+                    "edit-area"
+                ).value.trim(),
+
+            address:
+                document.getElementById(
+                    "edit-address"
+                ).value.trim(),
+
+            notes:
+                document.getElementById(
+                    "edit-notes"
+                ).value.trim()
+
+        };
+
+
+        saveStudents(students);
+
+        closeEditModal();
+
+        renderStudents();
 
         updateStudentCounters();
 
-        updateAdminStats();
+        showToast(
+            "تم حفظ تعديلات الطالب"
+        );
 
-        updateOwnerInfo();
+    });
 
-        initStudentSearch();
-
-        protectAdminPage();
-
-
-        const studentsTable =
-            document.querySelector(
-                "[data-students-table]"
-            );
+}
 
 
-        if (studentsTable) {
+/* =====================================================
+   إغلاق نافذة التعديل
+===================================================== */
 
-            renderStudentsTable(
-                studentsTable
+function closeEditModal() {
+
+    const modal =
+        document.getElementById(
+            "edit-modal"
+        );
+
+    if (modal) {
+
+        modal.classList.remove("show");
+
+    }
+
+}
+
+
+function initModal() {
+
+    const close =
+        document.getElementById(
+            "close-modal"
+        );
+
+
+    if (close) {
+
+        close.addEventListener(
+            "click",
+            closeEditModal
+        );
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "edit-modal"
+        );
+
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeEditModal();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   البحث
+===================================================== */
+
+function initStudentSearch() {
+
+    const search =
+        document.getElementById(
+            "student-search"
+        );
+
+    if (!search) return;
+
+
+    search.addEventListener(
+        "input",
+        () => {
+
+            renderStudents(
+                search.value
             );
 
         }
+    );
+
+}
+
+
+/* =====================================================
+   حذف جميع الطلاب
+===================================================== */
+
+function initClearStudents() {
+
+    const button =
+        document.getElementById(
+            "clear-students"
+        );
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const students =
+                getStudents();
+
+
+            if (!students.length) {
+
+                showToast(
+                    "لا توجد بيانات لحذفها"
+                );
+
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    "تحذير: سيتم حذف جميع الطلاب نهائياً من هذا الجهاز. هل تريد المتابعة؟"
+                );
+
+
+            if (!confirmed) return;
+
+
+            localStorage.removeItem(
+                STUDENTS_KEY
+            );
+
+
+            renderStudents();
+
+            updateStudentCounters();
+
+            showToast(
+                "تم حذف جميع الطلاب"
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   التشغيل
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        protectAdminPage();
+
+        initNavigation();
+
+        updateStudentCounters();
+
+        initStudentRegistration();
+
+        initOwnerLogin();
+
+        initLogout();
+
+        renderStudents();
+
+        initStudentSearch();
+
+        initClearStudents();
+
+        initEditForm();
+
+        initModal();
 
     }
 );
