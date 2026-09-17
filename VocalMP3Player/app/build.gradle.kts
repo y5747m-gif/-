@@ -59,22 +59,15 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.animation:animation")
 
-    // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-
     // Media3 / ExoPlayer
     implementation("androidx.media3:media3-exoplayer:1.2.1")
     implementation("androidx.media3:media3-session:1.2.1")
-    implementation("androidx.media3:media3-ui:1.2.1")
 
     // Coil for image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    // DocumentFile
-    implementation("androidx.documentfile:documentfile:1.0.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

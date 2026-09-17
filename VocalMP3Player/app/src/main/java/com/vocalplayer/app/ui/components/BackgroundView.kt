@@ -2,10 +2,12 @@ package com.vocalplayer.app.ui.components
 
 import android.net.Uri
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Offset
@@ -18,6 +20,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.vocalplayer.app.data.BackgroundStyle
 import com.vocalplayer.app.ui.theme.*
+
+private const val STAR_COUNT = 90
 
 @Composable
 fun AppBackground(
@@ -180,7 +184,8 @@ private fun DarkNebulaBackground() {
                     center = Offset.Unspecified,
                     radius = 800f
                 )
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
         // Nebula glow effects
         Box(
@@ -213,8 +218,21 @@ private fun StarryNightBackground() {
                     )
                 )
             )
-    )
-    // Stars would be rendered here with Canvas
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            repeat(STAR_COUNT) { index ->
+                val x = ((index * 73) % 997) / 997f * size.width
+                val y = ((index * 151 + 47) % 991) / 991f * size.height
+                val radius = 0.8f + (index % 3) * 0.5f
+                val alpha = 0.25f + (index % 5) * 0.12f
+                drawCircle(
+                    color = Color.White.copy(alpha = alpha),
+                    radius = radius,
+                    center = Offset(x, y)
+                )
+            }
+        }
+    }
 }
 
 @Composable

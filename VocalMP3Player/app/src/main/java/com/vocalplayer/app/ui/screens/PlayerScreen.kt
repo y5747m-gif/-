@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -61,11 +62,14 @@ fun PlayerScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Album Art
-        Box(contentAlignment = Alignment.Center) {
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
             AlbumArtView(
                 albumArtUri = playerState.currentTrack?.albumArtUri,
                 isPlaying = playerState.isPlaying,
-                size = 280.dp
+                size = minOf(280.dp, maxWidth)
             )
             if (playerState.isBuffering) {
                 CircularProgressIndicator(color = NeonCyan)
@@ -451,8 +455,10 @@ private fun PlaybackSpeedControl(
 
             // Speed presets
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f).forEach { preset ->
                     val isActive = speed == preset

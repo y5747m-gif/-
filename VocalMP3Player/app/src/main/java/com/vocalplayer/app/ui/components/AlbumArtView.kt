@@ -3,6 +3,7 @@ package com.vocalplayer.app.ui.components
 import android.net.Uri
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -90,12 +91,7 @@ fun AlbumArtView(
                     .crossfade(true)
                     .build(),
                 contentDescription = "Album Art",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .then(
-                        if (isPlaying) Modifier.rotate(rotation * 0.02f)
-                        else Modifier
-                    ),
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 onError = { imageLoadFailed = true }
             )
@@ -165,9 +161,11 @@ fun AlbumArtView(
                         modifier = Modifier
                             .fillMaxSize(grooveSize)
                             .rotate(if (isPlaying) rotation else 0f)
-                            .clip(CircleShape)
-                            .background(Color.Transparent)
-                            .padding(1.dp)
+                            .border(
+                                width = 1.dp,
+                                color = Color.White.copy(alpha = 0.08f),
+                                shape = CircleShape
+                            )
                     )
                 }
             }

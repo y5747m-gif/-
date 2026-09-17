@@ -34,7 +34,7 @@ fun WaveformVisualizer(
 
     val amplitudes = phases.mapIndexed { index, phase ->
         infiniteTransition.animateFloat(
-            initialValue = 0.1f,
+            initialValue = if (isPlaying) 0.1f else 0.05f,
             targetValue = if (isPlaying) {
                 0.3f + (kotlin.math.sin(index * 0.5f) * 0.4f + 0.4f) * 0.5f
             } else 0.05f,
