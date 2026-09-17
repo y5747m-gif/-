@@ -1,43 +1,55 @@
 package com.vocalplayer.app.service
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
-import android.os.Binder
-import android.os.IBinder
+import androidx.media3.common.Player
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 
+/**
+ * Background playback service.
+ *
+ * The [Player] is owned by PlayerViewModel/AudioPlayerManager and is handed to
+ * this service before it is started, so the service can build the [MediaSession]
+ * itself. The service must never release a player it does not own — releasing it
+ * here previously killed playback and caused a double release when the ViewModel
+ * was cleared.
+ */
 class MusicPlaybackService : MediaSessionService() {
 
     private var mediaSession: MediaSession? = null
 
-    inner class LocalBinder : Binder() {
-        fun getService(): MusicPlaybackService = this@MusicPlaybackService
-    }
-
-    private val binder = LocalBinder()
-
     companion object {
         const val CHANNEL_ID = "vocal_player_channel"
         const val NOTIFICATION_ID = 1001
+
+        /**
+         * Player shared by the ViewModel. Set before calling startService().
+         * The ViewModel keeps ownership and is responsible for releasing it.
+         */
+        @Volatile
+        var sharedPlayer: Player? = null
     }
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        ensureMediaSession()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {
+        return ensureMediaSession()
+    }
+
+    private fun ensureMediaSession(): MediaSession? {
+        if (mediaSession == null) {
+            sharedPlayer?.let { player ->
+                mediaSession = MediaSession.Builder(this, player).build()
+            }
+        }
         return mediaSession
-    }
-
-    override fun onBind(intent: Intent?): IBinder {
-        super.onBind(intent)
-        return binder
-    }
-
-    fun setMediaSession(session: MediaSession) {
-        mediaSession = session
     }
 
     private fun createNotificationChannel() {
@@ -63,10 +75,8 @@ class MusicPlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
-        mediaSession?.run {
-            player.release()
-            release()
-        }
+        // Only release the session; the player is owned by the ViewModel.
+        mediaSession?.release()
         mediaSession = null
         super.onDestroy()
     }

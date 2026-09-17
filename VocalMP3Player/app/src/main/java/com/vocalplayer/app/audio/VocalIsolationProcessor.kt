@@ -1,10 +1,6 @@
 package com.vocalplayer.app.audio
 
-import android.media.audiofx.Equalizer
-import android.media.audiofx.LoudnessEnhancer
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
+
 
 /**
  * Vocal Isolation Processor
