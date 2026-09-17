@@ -167,17 +167,6 @@ private fun GradientForestBackground() {
 
 @Composable
 private fun DarkNebulaBackground() {
-    val infiniteTransition = rememberInfiniteTransition(label = "nebula")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(60000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "nebulaRotation"
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -212,8 +201,6 @@ private fun DarkNebulaBackground() {
 
 @Composable
 private fun StarryNightBackground() {
-    val infiniteTransition = rememberInfiniteTransition(label = "stars")
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -235,6 +222,7 @@ private fun CustomImageBackground(uri: String?) {
     val context = LocalContext.current
 
     if (uri != null) {
+        DefaultBackground()
         AsyncImage(
             model = ImageRequest.Builder(context)
                 .data(Uri.parse(uri))

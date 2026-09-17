@@ -54,17 +54,23 @@ fun PlayerScreen(
         PlayerHeader(
             isVocalIsolationEnabled = playerState.isVocalIsolationEnabled,
             onToggleVocalIsolation = { viewModel.toggleVocalIsolation() },
-            hapticEnabled = settings.hapticFeedback
+            hapticEnabled = settings.hapticFeedback,
+            animationsEnabled = settings.buttonAnimations
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         // Album Art
-        AlbumArtView(
-            albumArtUri = playerState.currentTrack?.albumArtUri,
-            isPlaying = playerState.isPlaying,
-            size = 280.dp
-        )
+        Box(contentAlignment = Alignment.Center) {
+            AlbumArtView(
+                albumArtUri = playerState.currentTrack?.albumArtUri,
+                isPlaying = playerState.isPlaying,
+                size = 280.dp
+            )
+            if (playerState.isBuffering) {
+                CircularProgressIndicator(color = NeonCyan)
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -74,6 +80,16 @@ fun PlayerScreen(
             artist = playerState.currentTrack?.artist ?: "Select a song from library",
             album = playerState.currentTrack?.album ?: ""
         )
+
+        playerState.errorMessage?.let { message ->
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -134,7 +150,8 @@ fun PlayerScreen(
 private fun PlayerHeader(
     isVocalIsolationEnabled: Boolean,
     onToggleVocalIsolation: () -> Unit,
-    hapticEnabled: Boolean
+    hapticEnabled: Boolean,
+    animationsEnabled: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -148,7 +165,7 @@ private fun PlayerHeader(
                 color = Color.White
             )
             Text(
-                text = if (isVocalIsolationEnabled) "🎤 Vocal Isolation ON" else "🎵 Normal Mode",
+                text = if (isVocalIsolationEnabled) "🎤 Vocal Focus ON" else "🎵 Normal Mode",
                 style = MaterialTheme.typography.bodySmall,
                 color = if (isVocalIsolationEnabled) NeonGreen else Color.White.copy(alpha = 0.5f)
             )
@@ -160,7 +177,8 @@ private fun PlayerHeader(
             onClick = onToggleVocalIsolation,
             isActive = isVocalIsolationEnabled,
             activeColor = NeonGreen,
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = animationsEnabled
         )
     }
 }
@@ -280,7 +298,8 @@ private fun PlaybackControls(
             isActive = isShuffleEnabled,
             size = 36.dp,
             iconSize = 18.dp,
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = buttonAnimations
         )
 
         // Previous
@@ -294,7 +313,8 @@ private fun PlaybackControls(
                 Color.White.copy(alpha = 0.1f),
                 Color.White.copy(alpha = 0.2f)
             )),
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = buttonAnimations
         )
 
         // Play/Pause - Main button
@@ -305,7 +325,8 @@ private fun PlaybackControls(
             size = 72.dp,
             iconSize = 36.dp,
             gradient = Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = buttonAnimations
         )
 
         // Next
@@ -319,7 +340,8 @@ private fun PlaybackControls(
                 Color.White.copy(alpha = 0.1f),
                 Color.White.copy(alpha = 0.2f)
             )),
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = buttonAnimations
         )
 
         // Repeat
@@ -333,7 +355,8 @@ private fun PlaybackControls(
             isActive = repeatMode != RepeatMode.OFF,
             size = 36.dp,
             iconSize = 18.dp,
-            hapticEnabled = hapticEnabled
+            hapticEnabled = hapticEnabled,
+            animationsEnabled = buttonAnimations
         )
     }
 }
@@ -359,7 +382,7 @@ private fun VocalIsolationControls(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "🎤 Vocal Isolation",
+                    text = "🎤 Vocal Focus",
                     style = MaterialTheme.typography.titleMedium,
                     color = NeonGreen
                 )
@@ -384,7 +407,7 @@ private fun VocalIsolationControls(
             )
 
             Text(
-                text = "Adjusts how much music is removed. Higher = more vocal isolation.",
+                text = "Boosts the vocal range while reducing bass and high frequencies.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White.copy(alpha = 0.4f)
             )

@@ -8,24 +8,38 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.session.MediaSession
-import androidx.media3.session.SessionToken
 import com.vocalplayer.app.audio.AudioPlayerManager
 import com.vocalplayer.app.audio.AudioScanner
-import com.vocalplayer.app.data.*
+import com.vocalplayer.app.data.AppSettings
+import com.vocalplayer.app.data.AudioTrack
+import com.vocalplayer.app.data.BackgroundStyle
+import com.vocalplayer.app.data.PlayerState
+import com.vocalplayer.app.data.SettingsDataStore
 import com.vocalplayer.app.service.MusicPlaybackService
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(application: Application) : AndroidViewModel(application) {
 
     private val audioScanner = AudioScanner(application)
     private val settingsDataStore = SettingsDataStore(application)
-    private val audioPlayerManager = AudioPlayerManager(application)
 
-    val playerState: StateFlow<PlayerState> = audioPlayerManager.playerState
+    private var playerManager: AudioPlayerManager? = null
+    private var playerStateJob: Job? = null
+    private var serviceBound = false
+    private var pendingTrack: AudioTrack? = null
+
+    private val _playerState = MutableStateFlow(PlayerState())
+    val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
+
     val settings: StateFlow<AppSettings> = settingsDataStore.settings
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppSettings())
+        .stateIn(viewModelScope, SharingStarted.Eagerly, AppSettings())
 
     private val _audioTracks = MutableStateFlow<List<AudioTrack>>(emptyList())
     val audioTracks: StateFlow<List<AudioTrack>> = _audioTracks.asStateFlow()
@@ -33,72 +47,105 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _libraryError = MutableStateFlow<String?>(null)
+    val libraryError: StateFlow<String?> = _libraryError.asStateFlow()
+
     private val _currentScreen = MutableStateFlow<Screen>(Screen.Player)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
-    private var mediaSession: MediaSession? = null
-    private var musicService: MusicPlaybackService? = null
-    private var serviceBound = false
-
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as? MusicPlaybackService.LocalBinder
-            musicService = binder?.getService()
-            serviceBound = true
-            // Connect media session
-            mediaSession?.let { musicService?.setMediaSession(it) }
+            val manager = (service as? MusicPlaybackService.LocalBinder)?.getPlayerManager()
+                ?: return
+            playerManager = manager
+            observePlayer(manager)
+            applySettings(manager, settings.value)
+
+            val queuedTrack = pendingTrack
+            if (queuedTrack != null) {
+                pendingTrack = null
+                playTrack(queuedTrack)
+            } else if (manager.playerState.value.playlist.isEmpty() && _audioTracks.value.isNotEmpty()) {
+                manager.loadPlaylist(_audioTracks.value)
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            musicService = null
-            serviceBound = false
+            detachPlayer()
+        }
+
+        override fun onBindingDied(name: ComponentName?) {
+            detachPlayer()
+        }
+
+        override fun onNullBinding(name: ComponentName?) {
+            detachPlayer()
         }
     }
 
     init {
-        audioPlayerManager.initialize()
-        loadAudioFiles()
-        observeSettings()
         startAndBindService()
+        observeSettings()
+        loadAudioFiles()
     }
 
     private fun startAndBindService() {
         val context = getApplication<Application>()
-        val intent = Intent(context, MusicPlaybackService::class.java)
+        val serviceIntent = Intent(context, MusicPlaybackService::class.java)
+        runCatching { context.startService(serviceIntent) }
 
-        // Create media session
-        audioPlayerManager.getPlayer()?.let { player ->
-            mediaSession = MediaSession.Builder(context, player).build()
+        val bindIntent = Intent(context, MusicPlaybackService::class.java).apply {
+            action = MusicPlaybackService.ACTION_BIND_LOCAL
         }
+        serviceBound = runCatching {
+            context.bindService(bindIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }.getOrDefault(false)
+    }
 
-        try {
-            context.startService(intent)
-            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
-        } catch (e: Exception) {
-            // Service might not start on some devices
+    private fun observePlayer(manager: AudioPlayerManager) {
+        playerStateJob?.cancel()
+        playerStateJob = viewModelScope.launch {
+            manager.playerState.collect { state -> _playerState.value = state }
         }
+    }
+
+    private fun detachPlayer() {
+        playerStateJob?.cancel()
+        playerStateJob = null
+        playerManager = null
+        serviceBound = false
     }
 
     private fun observeSettings() {
         viewModelScope.launch {
             settingsDataStore.settings.collect { appSettings ->
-                audioPlayerManager.setVocalIsolation(appSettings.vocalIsolationEnabled)
-                audioPlayerManager.setVocalIsolationLevel(appSettings.vocalIsolationLevel)
-                audioPlayerManager.setPlaybackSpeed(appSettings.playbackSpeed)
+                playerManager?.let { applySettings(it, appSettings) }
             }
         }
+    }
+
+    private fun applySettings(manager: AudioPlayerManager, appSettings: AppSettings) {
+        manager.setVocalIsolation(appSettings.vocalIsolationEnabled)
+        manager.setVocalIsolationLevel(appSettings.vocalIsolationLevel)
+        manager.setPlaybackSpeed(appSettings.playbackSpeed)
     }
 
     private fun loadAudioFiles() {
         viewModelScope.launch {
             _isLoading.value = true
+            _libraryError.value = null
             try {
                 val tracks = audioScanner.scanAudioFiles()
                 _audioTracks.value = tracks
-                if (tracks.isNotEmpty()) {
-                    audioPlayerManager.loadPlaylist(tracks)
+                val manager = playerManager
+                if (tracks.isNotEmpty() && manager?.playerState?.value?.playlist?.isEmpty() == true) {
+                    manager.loadPlaylist(tracks)
                 }
-            } catch (_: Exception) {
+            } catch (_: SecurityException) {
+                _audioTracks.value = emptyList()
+                _libraryError.value = "Music access is required to scan this device."
+            } catch (error: Exception) {
+                _libraryError.value = error.localizedMessage ?: "The music library could not be loaded."
             } finally {
                 _isLoading.value = false
             }
@@ -106,49 +153,51 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun playTrack(track: AudioTrack) {
-        val index = _audioTracks.value.indexOf(track)
+        val manager = playerManager
+        if (manager == null) {
+            pendingTrack = track
+            return
+        }
+
+        val index = _audioTracks.value.indexOfFirst { it.id == track.id }
         if (index >= 0) {
-            audioPlayerManager.loadPlaylist(_audioTracks.value, index)
-            audioPlayerManager.play()
+            manager.loadPlaylist(_audioTracks.value, index)
+            manager.play()
         }
     }
 
-    fun playPause() = audioPlayerManager.playPause()
-    fun playNext() = audioPlayerManager.playNext()
-    fun playPrevious() = audioPlayerManager.playPrevious()
-    fun seekTo(position: Long) = audioPlayerManager.seekTo(position)
-    fun toggleShuffle() = audioPlayerManager.toggleShuffle()
-    fun toggleRepeat() = audioPlayerManager.toggleRepeat()
+    fun playPause() = playerManager?.playPause()
+    fun playNext() = playerManager?.playNext()
+    fun playPrevious() = playerManager?.playPrevious()
+    fun seekTo(position: Long) = playerManager?.seekTo(position)
+    fun toggleShuffle() = playerManager?.toggleShuffle()
+    fun toggleRepeat() = playerManager?.toggleRepeat()
 
     fun toggleVocalIsolation() {
-        val current = audioPlayerManager.playerState.value.isVocalIsolationEnabled
-        viewModelScope.launch {
-            settingsDataStore.updateVocalIsolation(!current)
-        }
-        audioPlayerManager.toggleVocalIsolation()
+        setVocalIsolationEnabled(!playerState.value.isVocalIsolationEnabled)
+    }
+
+    fun setVocalIsolationEnabled(enabled: Boolean) {
+        playerManager?.setVocalIsolation(enabled)
+        viewModelScope.launch { settingsDataStore.updateVocalIsolation(enabled) }
     }
 
     fun setVocalIsolationLevel(level: Float) {
-        viewModelScope.launch {
-            settingsDataStore.updateVocalIsolationLevel(level)
-        }
-        audioPlayerManager.setVocalIsolationLevel(level)
+        playerManager?.setVocalIsolationLevel(level)
+        viewModelScope.launch { settingsDataStore.updateVocalIsolationLevel(level) }
     }
 
     fun setPlaybackSpeed(speed: Float) {
-        viewModelScope.launch {
-            settingsDataStore.updatePlaybackSpeed(speed)
-        }
-        audioPlayerManager.setPlaybackSpeed(speed)
+        playerManager?.setPlaybackSpeed(speed)
+        viewModelScope.launch { settingsDataStore.updatePlaybackSpeed(speed) }
     }
 
-    fun setVolume(volume: Float) = audioPlayerManager.setVolume(volume)
+    fun setVolume(volume: Float) = playerManager?.setVolume(volume)
 
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
     }
 
-    // Settings
     fun updateBackgroundStyle(style: BackgroundStyle) {
         viewModelScope.launch { settingsDataStore.updateBackgroundStyle(style) }
     }
@@ -169,30 +218,32 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch { settingsDataStore.updateHapticFeedback(enabled) }
     }
 
-    fun updateCrossfadeEnabled(enabled: Boolean) {
-        viewModelScope.launch { settingsDataStore.updateCrossfadeEnabled(enabled) }
-    }
-
     fun refreshLibrary() {
         loadAudioFiles()
     }
 
     override fun onCleared() {
-        super.onCleared()
-        audioPlayerManager.release()
-        mediaSession?.release()
-        mediaSession = null
+        val shouldStopService = !playerState.value.isPlaying
+        playerStateJob?.cancel()
+        playerStateJob = null
+
         if (serviceBound) {
-            try {
-                getApplication<Application>().unbindService(serviceConnection)
-            } catch (_: Exception) {}
+            runCatching { getApplication<Application>().unbindService(serviceConnection) }
             serviceBound = false
         }
+        playerManager = null
+
+        if (shouldStopService) {
+            getApplication<Application>().stopService(
+                Intent(getApplication(), MusicPlaybackService::class.java)
+            )
+        }
+        super.onCleared()
     }
 }
 
 sealed class Screen {
-    object Player : Screen()
-    object Library : Screen()
-    object Settings : Screen()
+    data object Player : Screen()
+    data object Library : Screen()
+    data object Settings : Screen()
 }

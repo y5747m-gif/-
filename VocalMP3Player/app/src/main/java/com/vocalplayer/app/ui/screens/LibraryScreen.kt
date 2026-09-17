@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,9 @@ import com.vocalplayer.app.ui.theme.*
 fun LibraryScreen(
     tracks: List<AudioTrack>,
     isLoading: Boolean,
+    errorMessage: String?,
+    hasAudioPermission: Boolean,
+    onRequestAudioPermission: () -> Unit,
     onTrackClick: (AudioTrack) -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -162,44 +166,41 @@ fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (isLoading) {
-            Box(
+        when {
+            !hasAudioPermission -> LibraryMessage(
+                icon = Icons.Default.Lock,
+                title = "Music access needed",
+                message = "Allow access to find and play audio files stored on this device.",
+                actionLabel = "Allow access",
+                onAction = onRequestAudioPermission
+            )
+
+            isLoading -> Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = NeonCyan)
             }
-        } else if (filteredTracks.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.MusicOff,
-                        contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.3f),
-                        modifier = Modifier.size(64.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = if (searchQuery.isNotEmpty()) "No songs match your search"
-                        else "No music files found",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White.copy(alpha = 0.5f)
-                    )
-                    if (searchQuery.isEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Add some music to your device and refresh",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.3f)
-                        )
-                    }
+
+            errorMessage != null -> LibraryMessage(
+                icon = Icons.Default.ErrorOutline,
+                title = "Library unavailable",
+                message = errorMessage,
+                actionLabel = "Try again",
+                onAction = onRefresh
+            )
+
+            filteredTracks.isEmpty() -> LibraryMessage(
+                icon = Icons.Default.MusicOff,
+                title = if (searchQuery.isNotEmpty()) "No matching songs" else "No music files found",
+                message = if (searchQuery.isNotEmpty()) {
+                    "Try a different title, artist, or album."
+                } else {
+                    "Add music to this device, then refresh the library."
                 }
-            }
-        } else {
-            LazyColumn(
+            )
+
+            else -> LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 contentPadding = PaddingValues(bottom = 100.dp)
             ) {
@@ -212,6 +213,56 @@ fun LibraryScreen(
                         index = index + 1,
                         onClick = { onTrackClick(track) }
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LibraryMessage(
+    icon: ImageVector,
+    title: String,
+    message: String,
+    actionLabel: String? = null,
+    onAction: (() -> Unit)? = null
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.White.copy(alpha = 0.3f),
+                modifier = Modifier.size(64.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.White.copy(alpha = 0.7f)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.4f)
+            )
+            if (actionLabel != null && onAction != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = onAction,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = NeonCyan,
+                        contentColor = DarkBackground
+                    )
+                ) {
+                    Text(actionLabel)
                 }
             }
         }
@@ -289,7 +340,7 @@ private fun TrackItem(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
-                    if (track.album != "Unknown Album") {
+                    if (!track.album.equals("Unknown album", ignoreCase = true)) {
                         Text(
                             text = " • ${track.album}",
                             style = MaterialTheme.typography.bodySmall,

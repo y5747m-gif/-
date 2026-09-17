@@ -1,6 +1,5 @@
 package com.vocalplayer.app.ui.components
 
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -34,6 +33,7 @@ fun AlbumArtView(
     size: Dp = 280.dp
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "album")
+    var imageLoadFailed by remember(albumArtUri) { mutableStateOf(false) }
 
     // Vinyl rotation
     val rotation by infiniteTransition.animateFloat(
@@ -82,7 +82,7 @@ fun AlbumArtView(
             .clip(RoundedCornerShape(24.dp)),
         contentAlignment = Alignment.Center
     ) {
-        if (albumArtUri != null) {
+        if (albumArtUri != null && !imageLoadFailed) {
             val context = LocalContext.current
             AsyncImage(
                 model = ImageRequest.Builder(context)
@@ -96,7 +96,8 @@ fun AlbumArtView(
                         if (isPlaying) Modifier.rotate(rotation * 0.02f)
                         else Modifier
                     ),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                onError = { imageLoadFailed = true }
             )
         } else {
             // Default album art

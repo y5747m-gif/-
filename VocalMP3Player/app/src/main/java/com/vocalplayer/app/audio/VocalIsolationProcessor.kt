@@ -1,43 +1,33 @@
 package com.vocalplayer.app.audio
 
-import android.media.audiofx.Equalizer
-import android.media.audiofx.LoudnessEnhancer
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-
 /**
- * Vocal Isolation Processor
+ * Calculates the vocal-focus filter used by the player.
  *
- * Uses multiple audio processing techniques to isolate vocals:
- * 1. Center Channel Extraction (works for stereo tracks where vocals are centered)
- * 2. Frequency-based filtering to focus on vocal frequency range (300Hz - 3kHz)
- * 3. Dynamic range processing to enhance vocal content
+ * The real-time player uses the equalizer settings generated here. The PCM
+ * helper is kept separate so the center-channel algorithm can be tested and
+ * reused by an audio processor without depending on Android framework types.
  */
 class VocalIsolationProcessor {
 
-    private var isEnabled = false
-    private var isolationLevel = 1.0f
+    private var enabled = false
+    private var isolationLevel = 1f
 
-    // Audio effect parameters
     companion object {
-        // Vocal frequency range (Hz)
         const val VOCAL_LOW_FREQ = 300
         const val VOCAL_MID_FREQ = 1000
         const val VOCAL_HIGH_FREQ = 3400
 
-        // Processing constants
-        const val CENTER_EXTRACTION_STRENGTH = 0.7f
+        const val CENTER_EXTRACTION_STRENGTH = 1f
         const val BASS_CUT_DB = -12f
         const val TREBLE_CUT_DB = -8f
         const val VOCAL_BOOST_DB = 6f
     }
 
     fun setEnabled(enabled: Boolean) {
-        isEnabled = enabled
+        this.enabled = enabled
     }
 
-    fun isProcessorEnabled(): Boolean = isEnabled
+    fun isProcessorEnabled(): Boolean = enabled
 
     fun setLevel(level: Float) {
         isolationLevel = level.coerceIn(0f, 1f)
@@ -45,92 +35,71 @@ class VocalIsolationProcessor {
 
     fun getLevel(): Float = isolationLevel
 
-    /**
-     * Process audio buffer for vocal isolation
-     * This works with the raw PCM data from the audio decoder
-     *
-     * For ExoPlayer, we apply the effect using Android's built-in audio effects
-     * which operate at the AudioTrack level.
-     */
-    fun getCenterExtractionStrength(): Float {
-        return if (isEnabled) {
-            CENTER_EXTRACTION_STRENGTH * isolationLevel
-        } else {
-            0f
+    fun getCenterExtractionStrength(): Float =
+        if (enabled) CENTER_EXTRACTION_STRENGTH * isolationLevel else 0f
+
+    /** Returns the requested equalizer level in millibels for [frequencyHz]. */
+    fun getBandLevel(frequencyHz: Int): Short {
+        if (!enabled) return 0
+
+        val levelDb = when {
+            frequencyHz < VOCAL_LOW_FREQ -> BASS_CUT_DB * isolationLevel
+            frequencyHz > VOCAL_HIGH_FREQ -> TREBLE_CUT_DB * isolationLevel
+            frequencyHz in 800..2500 -> VOCAL_BOOST_DB * isolationLevel
+            frequencyHz in VOCAL_LOW_FREQ..800 -> VOCAL_BOOST_DB * 0.6f * isolationLevel
+            else -> VOCAL_BOOST_DB * 0.3f * isolationLevel
         }
+
+        return (levelDb * 100)
+            .toInt()
+            .coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt())
+            .toShort()
     }
 
     /**
-     * Calculate the frequency filter parameters for the equalizer
-     * Returns a map of frequency band adjustments
+     * Produces levels for evenly spaced bands over [freqRange].
+     *
+     * Android equalizers expose each band's actual center frequency, so the
+     * player normally calls [getBandLevel] directly. This method remains useful
+     * to other processors and is deliberately safe for empty/single-band input.
      */
     fun getEqualizerSettings(numBands: Int, freqRange: IntRange): Map<Int, Short> {
-        val settings = mutableMapOf<Int, Short>()
+        if (!enabled || numBands <= 0) return emptyMap()
 
-        if (!isEnabled) return settings
-
-        for (i in 0 until numBands) {
-            val centerFreq = freqRange.first + (freqRange.last - freqRange.first) * i / numBands
-            val level = when {
-                // Boost vocal range (300Hz - 3.4kHz)
-                centerFreq in VOCAL_LOW_FREQ..VOCAL_HIGH_FREQ -> {
-                    val vocalBoost = when {
-                        centerFreq in 800..2500 -> VOCAL_BOOST_DB * isolationLevel
-                        centerFreq in 300..800 -> VOCAL_BOOST_DB * 0.6f * isolationLevel
-                        else -> VOCAL_BOOST_DB * 0.3f * isolationLevel
-                    }
-                    (vocalBoost * 100).toInt().toShort()
-                }
-                // Cut bass frequencies (below vocal range)
-                centerFreq < VOCAL_LOW_FREQ -> {
-                    (BASS_CUT_DB * isolationLevel * 100).toInt().toShort()
-                }
-                // Cut high frequencies (above vocal range)
-                centerFreq > VOCAL_HIGH_FREQ -> {
-                    (TREBLE_CUT_DB * isolationLevel * 100).toInt().toShort()
-                }
-                else -> 0
+        val denominator = (numBands - 1).coerceAtLeast(1)
+        return buildMap(numBands) {
+            repeat(numBands) { band ->
+                val frequency = freqRange.first +
+                    (freqRange.last - freqRange.first) * band / denominator
+                put(band, getBandLevel(frequency))
             }
-            settings[i] = level
         }
-
-        return settings
     }
 
     /**
-     * Process stereo audio data to extract center channel (vocals)
-     * Modifies the buffer in-place
-     *
-     * Algorithm: Center = (L + R) / 2
-     * Side = (L - R) / 2 (this is where most music/instruments sit)
-     * Vocals = Center - Side * strength
+     * Blends a stereo PCM buffer toward its center channel in place.
+     * [frameCount] is bounded by the available complete stereo frames.
      */
     fun processStereoBuffer(buffer: ShortArray, frameCount: Int) {
-        if (!isEnabled) return
+        val strength = getCenterExtractionStrength()
+        if (strength <= 0f || frameCount <= 0) return
 
-        val strength = CENTER_EXTRACTION_STRENGTH * isolationLevel
-
-        for (i in 0 until frameCount) {
-            val leftIdx = i * 2
-            val rightIdx = i * 2 + 1
-
-            if (rightIdx >= buffer.size) break
-
-            val left = buffer[leftIdx].toFloat()
-            val right = buffer[rightIdx].toFloat()
-
-            // Center channel (vocals + centered instruments)
+        val safeFrameCount = frameCount.coerceAtMost(buffer.size / 2)
+        repeat(safeFrameCount) { frame ->
+            val leftIndex = frame * 2
+            val rightIndex = leftIndex + 1
+            val left = buffer[leftIndex].toFloat()
+            val right = buffer[rightIndex].toFloat()
             val center = (left + right) / 2f
 
-            // Side channel (panned instruments)
-            val side = (left - right) / 2f
-
-            // Extract center by reducing side content
-            val vocal = center - side * strength
-
-            // Apply the processed signal to both channels
-            buffer[leftIdx] = vocal.coerceIn(Short.MIN_VALUE.toFloat(), Short.MAX_VALUE.toFloat()).toInt().toShort()
-            buffer[rightIdx] = vocal.coerceIn(Short.MIN_VALUE.toFloat(), Short.MAX_VALUE.toFloat()).toInt().toShort()
+            buffer[leftIndex] = blendAndClamp(left, center, strength)
+            buffer[rightIndex] = blendAndClamp(right, center, strength)
         }
     }
+
+    private fun blendAndClamp(original: Float, center: Float, strength: Float): Short =
+        (original + (center - original) * strength)
+            .coerceIn(Short.MIN_VALUE.toFloat(), Short.MAX_VALUE.toFloat())
+            .toInt()
+            .toShort()
 }

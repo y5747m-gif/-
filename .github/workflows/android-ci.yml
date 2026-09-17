@@ -45,10 +45,15 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
-      - name: Run tests, lint, and build APK
+      - name: Run unit tests and build APK
         run: |
           set -o pipefail
-          ./gradlew --no-daemon --stacktrace testDebugUnitTest lintDebug assembleDebug 2>&1 | tee build.log
+          ./gradlew --no-daemon --stacktrace testDebugUnitTest assembleDebug 2>&1 | tee build.log
+
+      - name: Run Android lint
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace lintDebug 2>&1 | tee lint.log
 
       - name: Report Gradle failure details
         if: failure()
@@ -56,11 +61,14 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
-          log = Path("build.log")
-          if log.exists():
-              details = log.read_text(errors="replace")[-30_000:]
-              details = details.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
-              print(f"::error title=Gradle build failed::{details}")
+          reports = sorted(Path("app/build/reports").glob("lint-results-*.txt"))
+          sources = reports or [path for path in (Path("build.log"), Path("lint.log")) if path.exists()]
+          for source in sources:
+              text = source.read_text(errors="replace")
+              for index in range(0, len(text), 3_500):
+                  details = text[index:index + 3_500]
+                  details = details.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                  print(f"::error title={source.name}::{details}")
           PY
 
       - name: Upload debug APK

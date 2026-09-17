@@ -3,6 +3,7 @@ package com.vocalplayer.app.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -37,7 +38,8 @@ fun PulseButton(
     gradient: Brush = Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
     iconColor: Color = Color.White,
     enabled: Boolean = true,
-    hapticEnabled: Boolean = true
+    hapticEnabled: Boolean = true,
+    animationsEnabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -79,7 +81,10 @@ fun PulseButton(
     Box(
         modifier = modifier
             .size(size)
-            .scale(pressScale * if (enabled) pulseScale else 1f),
+            .scale(
+                (if (animationsEnabled) pressScale else 1f) *
+                    if (enabled && animationsEnabled) pulseScale else 1f
+            ),
         contentAlignment = Alignment.Center
     ) {
         // Glow effect
@@ -91,7 +96,9 @@ fun PulseButton(
                     .background(
                         Brush.radialGradient(
                             colors = listOf(
-                                NeonCyan.copy(alpha = glowAlpha * 0.3f),
+                                NeonCyan.copy(
+                                    alpha = (if (animationsEnabled) glowAlpha else 0.5f) * 0.3f
+                                ),
                                 Color.Transparent
                             )
                         )
@@ -141,7 +148,8 @@ fun GlowButton(
     activeColor: Color = NeonCyan,
     size: Dp = 44.dp,
     iconSize: Dp = 22.dp,
-    hapticEnabled: Boolean = true
+    hapticEnabled: Boolean = true,
+    animationsEnabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -171,7 +179,7 @@ fun GlowButton(
     Box(
         modifier = modifier
             .size(size)
-            .scale(scale)
+            .scale(if (animationsEnabled) scale else 1f)
             .clip(CircleShape)
             .background(backgroundColor)
             .clickable(
@@ -204,10 +212,12 @@ fun GlowButton(
             Box(
                 modifier = Modifier
                     .size(size)
-                    .clip(CircleShape)
-                    .background(Color.Transparent)
-                    .then(
-                        Modifier.padding(2.dp)
+                    .border(
+                        width = 1.dp,
+                        color = activeColor.copy(
+                            alpha = if (animationsEnabled) ringAlpha else 0.8f
+                        ),
+                        shape = CircleShape
                     )
             )
         }
@@ -221,7 +231,8 @@ fun RippleButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isActive: Boolean = false,
-    hapticEnabled: Boolean = true
+    hapticEnabled: Boolean = true,
+    animationsEnabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -238,7 +249,7 @@ fun RippleButton(
 
     Box(
         modifier = modifier
-            .scale(scale)
+            .scale(if (animationsEnabled) scale else 1f)
             .clip(RoundedCornerShape(16.dp))
             .background(
                 if (isActive) NeonCyan.copy(alpha = 0.15f)

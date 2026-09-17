@@ -26,9 +26,10 @@ fun WaveformVisualizer(
     barCount: Int = 40
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "waveform")
+    val safeBarCount = barCount.coerceAtLeast(1)
 
-    val phases = remember {
-        List(barCount) { it * 0.15f }
+    val phases = remember(safeBarCount) {
+        List(safeBarCount) { it * 0.15f }
     }
 
     val amplitudes = phases.mapIndexed { index, phase ->
@@ -56,11 +57,11 @@ fun WaveformVisualizer(
             .fillMaxWidth()
             .height(60.dp)
     ) {
-        val barWidth = size.width / (barCount * 2)
+        val barWidth = size.width / (safeBarCount * 2)
         val centerY = size.height / 2
 
         amplitudes.forEachIndexed { index, amp ->
-            val x = size.width * index / barCount
+            val x = size.width * (index + 0.5f) / safeBarCount
             val barHeight = size.height * amp.value
 
             val gradient = Brush.verticalGradient(
@@ -102,7 +103,6 @@ fun WaveformVisualizer(
 @Composable
 fun CircularVisualizer(
     isPlaying: Boolean,
-    progress: Float,
     modifier: Modifier = Modifier,
     ringCount: Int = 3
 ) {

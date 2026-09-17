@@ -30,13 +30,16 @@ import com.vocalplayer.app.ui.theme.*
 
 @Composable
 fun MainApp(
-    viewModel: PlayerViewModel = viewModel()
+    viewModel: PlayerViewModel = viewModel(),
+    hasAudioPermission: Boolean,
+    onRequestAudioPermission: () -> Unit
 ) {
     val playerState by viewModel.playerState.collectAsState()
     val settings by viewModel.settings.collectAsState()
     val currentScreen by viewModel.currentScreen.collectAsState()
     val audioTracks by viewModel.audioTracks.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val libraryError by viewModel.libraryError.collectAsState()
     val haptic = LocalHapticFeedback.current
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -81,6 +84,9 @@ fun MainApp(
                         is Screen.Library -> LibraryScreen(
                             tracks = audioTracks,
                             isLoading = isLoading,
+                            errorMessage = libraryError,
+                            hasAudioPermission = hasAudioPermission,
+                            onRequestAudioPermission = onRequestAudioPermission,
                             onTrackClick = { track ->
                                 viewModel.playTrack(track)
                                 viewModel.navigateTo(Screen.Player)
@@ -145,7 +151,7 @@ private fun BottomNavigationBar(
                         // Selection indicator dot
                         if (isSelected) {
                             val infiniteTransition = rememberInfiniteTransition(label = "dot")
-                            val dotAlpha by infiniteTransition.animateFloat(
+                            val animatedDotAlpha by infiniteTransition.animateFloat(
                                 initialValue = 0.5f,
                                 targetValue = 1f,
                                 animationSpec = infiniteRepeatable(
@@ -154,6 +160,7 @@ private fun BottomNavigationBar(
                                 ),
                                 label = "dotAlpha"
                             )
+                            val dotAlpha = if (buttonAnimations) animatedDotAlpha else 1f
                             Box(
                                 modifier = Modifier
                                     .size(4.dp)

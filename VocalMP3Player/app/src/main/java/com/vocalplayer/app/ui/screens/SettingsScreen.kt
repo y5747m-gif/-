@@ -1,5 +1,6 @@
 package com.vocalplayer.app.ui.screens
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -68,7 +69,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Background Section
-        SettingsSection(title = "🎨 Background", icon = Icons.Default.Wallpaper) {
+        SettingsSection(title = "Background", icon = Icons.Default.Wallpaper) {
             BackgroundSelector(
                 currentStyle = settings.backgroundStyle,
                 customUri = settings.customBackgroundUri,
@@ -80,7 +81,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Audio Section
-        SettingsSection(title = "🎵 Audio", icon = Icons.Default.MusicNote) {
+        SettingsSection(title = "Audio", icon = Icons.Default.MusicNote) {
             SettingsToggleItem(
                 title = "Show Visualizer",
                 subtitle = "Display audio waveform animation",
@@ -90,18 +91,18 @@ fun SettingsScreen(
             )
 
             SettingsToggleItem(
-                title = "Vocal Isolation Default",
-                subtitle = "Enable vocal isolation on app start",
+                title = "Vocal Focus Default",
+                subtitle = "Emphasize the vocal range when the app starts",
                 icon = Icons.Default.Mic,
                 isChecked = settings.vocalIsolationEnabled,
-                onToggle = { viewModel.toggleVocalIsolation() }
+                onToggle = viewModel::setVocalIsolationEnabled
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // UI Section
-        SettingsSection(title = "✨ Interface", icon = Icons.Default.Palette) {
+        SettingsSection(title = "Interface", icon = Icons.Default.Palette) {
             SettingsToggleItem(
                 title = "Button Animations",
                 subtitle = "Enable pulse and bounce animations",
@@ -121,21 +122,8 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Playback Section
-        SettingsSection(title = "🎧 Playback", icon = Icons.Default.PlayCircle) {
-            SettingsToggleItem(
-                title = "Crossfade",
-                subtitle = "Smooth transition between tracks",
-                icon = Icons.Default.SwapHoriz,
-                isChecked = settings.crossfadeEnabled,
-                onToggle = { viewModel.updateCrossfadeEnabled(it) }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         // About Section
-        SettingsSection(title = "ℹ️ About", icon = Icons.Default.Info) {
+        SettingsSection(title = "About", icon = Icons.Default.Info) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -159,9 +147,8 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "An offline MP3 player with AI-powered vocal isolation. " +
-                                "Remove music and keep only vocals/speech. " +
-                                "Works completely offline with no internet required.",
+                        text = "An offline audio player with adjustable vocal focus, " +
+                                "background playback, and media controls. No internet is required.",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White.copy(alpha = 0.4f)
                     )
@@ -184,6 +171,13 @@ private fun SettingsSection(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = NeonCyan,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium.copy(
@@ -269,9 +263,18 @@ private fun BackgroundSelector(
 ) {
     val context = LocalContext.current
     val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
-        uri?.let { onCustomUriSelected(it.toString()) }
+        uri?.let { selectedUri ->
+            runCatching {
+                context.contentResolver.takePersistableUriPermission(
+                    selectedUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+            onCustomUriSelected(selectedUri.toString())
+            onStyleSelected(BackgroundStyle.CUSTOM_IMAGE)
+        }
     }
 
     Column(
@@ -300,7 +303,7 @@ private fun BackgroundSelector(
                         onClick = {
                             when (style) {
                                 BackgroundStyle.CUSTOM_IMAGE -> {
-                                    imagePicker.launch("image/*")
+                                    imagePicker.launch(arrayOf("image/*"))
                                 }
                                 else -> onStyleSelected(style)
                             }
@@ -339,7 +342,10 @@ private fun BackgroundSelector(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(
-                    onClick = { onCustomUriSelected(null) },
+                    onClick = {
+                        onCustomUriSelected(null)
+                        onStyleSelected(BackgroundStyle.DEFAULT)
+                    },
                     modifier = Modifier.size(24.dp)
                 ) {
                     Icon(

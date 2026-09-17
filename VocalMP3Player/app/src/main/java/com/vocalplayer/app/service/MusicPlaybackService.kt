@@ -1,59 +1,35 @@
 package com.vocalplayer.app.service
 
-import android.app.*
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.vocalplayer.app.audio.AudioPlayerManager
 
+/** Owns playback so audio and media controls survive Activity recreation. */
 class MusicPlaybackService : MediaSessionService() {
 
+    private lateinit var playerManager: AudioPlayerManager
     private var mediaSession: MediaSession? = null
 
     inner class LocalBinder : Binder() {
-        fun getService(): MusicPlaybackService = this@MusicPlaybackService
+        fun getPlayerManager(): AudioPlayerManager = playerManager
     }
 
-    private val binder = LocalBinder()
-
-    companion object {
-        const val CHANNEL_ID = "vocal_player_channel"
-        const val NOTIFICATION_ID = 1001
-    }
+    private val localBinder = LocalBinder()
 
     override fun onCreate() {
         super.onCreate()
-        createNotificationChannel()
+        playerManager = AudioPlayerManager(applicationContext).also { it.initialize() }
+        val player = checkNotNull(playerManager.getPlayer())
+        mediaSession = MediaSession.Builder(this, player).build()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {
-        return mediaSession
-    }
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
 
-    override fun onBind(intent: Intent?): IBinder {
-        super.onBind(intent)
-        return binder
-    }
-
-    fun setMediaSession(session: MediaSession) {
-        mediaSession = session
-    }
-
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            "Music Playback",
-            NotificationManager.IMPORTANCE_LOW
-        ).apply {
-            description = "Shows current playing track"
-            setShowBadge(false)
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        }
-
-        val notificationManager = getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
-    }
+    override fun onBind(intent: Intent?): IBinder? =
+        if (intent?.action == ACTION_BIND_LOCAL) localBinder else super.onBind(intent)
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         val player = mediaSession?.player
@@ -63,11 +39,13 @@ class MusicPlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
-        mediaSession?.run {
-            player.release()
-            release()
-        }
+        mediaSession?.release()
         mediaSession = null
+        playerManager.release()
         super.onDestroy()
+    }
+
+    companion object {
+        const val ACTION_BIND_LOCAL = "com.vocalplayer.app.action.BIND_PLAYBACK_SERVICE"
     }
 }

@@ -15,8 +15,10 @@ data class AudioTrack(
 data class PlayerState(
     val currentTrack: AudioTrack? = null,
     val isPlaying: Boolean = false,
+    val isBuffering: Boolean = false,
     val currentPosition: Long = 0L,
     val duration: Long = 0L,
+    val errorMessage: String? = null,
     val volume: Float = 1f,
     val isVocalIsolationEnabled: Boolean = false,
     val vocalIsolationLevel: Float = 1f,
@@ -37,20 +39,12 @@ enum class BackgroundStyle {
 }
 
 data class AppSettings(
-    val isDarkTheme: Boolean = true,
     val backgroundStyle: BackgroundStyle = BackgroundStyle.DEFAULT,
     val customBackgroundUri: String? = null,
     val vocalIsolationEnabled: Boolean = false,
     val vocalIsolationLevel: Float = 1f,
     val playbackSpeed: Float = 1f,
-    val crossfadeEnabled: Boolean = false,
-    val gaplessPlayback: Boolean = true,
-    val audioQuality: AudioQuality = AudioQuality.HIGH,
     val showVisualizer: Boolean = true,
     val buttonAnimations: Boolean = true,
     val hapticFeedback: Boolean = true
 )
-
-enum class AudioQuality {
-    LOW, MEDIUM, HIGH
-}

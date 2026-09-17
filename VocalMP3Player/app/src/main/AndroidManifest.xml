@@ -33,18 +33,11 @@
         <service
             android:name=".service.MusicPlaybackService"
             android:foregroundServiceType="mediaPlayback"
-            android:exported="false" />
-
-        <receiver
-            android:name=".service.MusicNotificationReceiver"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.vocalplayer.action.PLAY_PAUSE" />
-                <action android:name="com.vocalplayer.action.NEXT" />
-                <action android:name="com.vocalplayer.action.PREV" />
-                <action android:name="com.vocalplayer.action.STOP" />
+                <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
-        </receiver>
+        </service>
 
     </application>
 </manifest>
