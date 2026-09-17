@@ -94,7 +94,7 @@ fun SettingsScreen(
                 subtitle = "Enable vocal isolation on app start",
                 icon = Icons.Default.Mic,
                 isChecked = settings.vocalIsolationEnabled,
-                onToggle = { viewModel.toggleVocalIsolation() }
+                onToggle = { viewModel.setVocalIsolationEnabled(it) }
             )
         }
 

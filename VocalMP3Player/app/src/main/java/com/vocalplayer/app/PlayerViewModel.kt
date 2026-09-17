@@ -1,15 +1,10 @@
 package com.vocalplayer.app
 
 import android.app.Application
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.session.MediaSession
-import androidx.media3.session.SessionToken
 import com.vocalplayer.app.audio.AudioPlayerManager
 import com.vocalplayer.app.audio.AudioScanner
 import com.vocalplayer.app.data.*
@@ -36,44 +31,22 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     private val _currentScreen = MutableStateFlow<Screen>(Screen.Player)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
-    private var mediaSession: MediaSession? = null
-    private var musicService: MusicPlaybackService? = null
-    private var serviceBound = false
-
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as? MusicPlaybackService.LocalBinder
-            musicService = binder?.getService()
-            serviceBound = true
-            // Connect media session
-            mediaSession?.let { musicService?.setMediaSession(it) }
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            musicService = null
-            serviceBound = false
-        }
-    }
-
     init {
         audioPlayerManager.initialize()
         loadAudioFiles()
         observeSettings()
-        startAndBindService()
+        startMusicService()
     }
 
-    private fun startAndBindService() {
+    private fun startMusicService() {
         val context = getApplication<Application>()
+        // Hand the player to the service (the service builds its own MediaSession
+        // around it) and start it for background playback.
+        MusicPlaybackService.sharedPlayer = audioPlayerManager.getPlayer()
+
         val intent = Intent(context, MusicPlaybackService::class.java)
-
-        // Create media session
-        audioPlayerManager.getPlayer()?.let { player ->
-            mediaSession = MediaSession.Builder(context, player).build()
-        }
-
         try {
             context.startService(intent)
-            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         } catch (e: Exception) {
             // Service might not start on some devices
         }
@@ -120,12 +93,24 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     fun toggleShuffle() = audioPlayerManager.toggleShuffle()
     fun toggleRepeat() = audioPlayerManager.toggleRepeat()
 
+    /**
+     * Toggles vocal isolation. Settings are the single source of truth; the
+     * player applies the change via [observeSettings].
+     */
     fun toggleVocalIsolation() {
-        val current = audioPlayerManager.playerState.value.isVocalIsolationEnabled
+        val current = settings.value.vocalIsolationEnabled
         viewModelScope.launch {
             settingsDataStore.updateVocalIsolation(!current)
         }
-        audioPlayerManager.toggleVocalIsolation()
+    }
+
+    /**
+     * Persists the vocal isolation default without double-applying it.
+     */
+    fun setVocalIsolationEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsDataStore.updateVocalIsolation(enabled)
+        }
     }
 
     fun setVocalIsolationLevel(level: Float) {
@@ -179,15 +164,9 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
     override fun onCleared() {
         super.onCleared()
+        // The player is owned here; the service only borrows it.
+        MusicPlaybackService.sharedPlayer = null
         audioPlayerManager.release()
-        mediaSession?.release()
-        mediaSession = null
-        if (serviceBound) {
-            try {
-                getApplication<Application>().unbindService(serviceConnection)
-            } catch (_: Exception) {}
-            serviceBound = false
-        }
     }
 }
 
