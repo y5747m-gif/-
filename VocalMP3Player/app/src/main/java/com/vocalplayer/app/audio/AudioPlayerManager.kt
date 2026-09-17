@@ -33,7 +33,7 @@ class AudioPlayerManager(private val context: Context) {
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
-                    .setContentType(C.AUDIO_TYPE_MUSIC)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                     .build(),
                 true // handleAudioFocus
             )

@@ -154,7 +154,7 @@ fun CircularVisualizer(
             for (i in 0..points) {
                 val angle = (i * 2 * PI / points) + Math.toRadians(rotation.toDouble())
                 val waveOffset = if (isPlaying) {
-                    sin(angle * 4) * 5f * scale
+                    (sin(angle * 4) * 5.0 * scale).toFloat()
                 } else 0f
                 val r = radius * scale + waveOffset
 

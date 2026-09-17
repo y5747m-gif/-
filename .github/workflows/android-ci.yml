@@ -40,7 +40,7 @@ jobs:
             VocalMP3Player/app/*.gradle.kts
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4
+        uses: gradle/actions/wrapper-validation@v6
 
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload debug APK
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vocal-mp3-player-debug
           path: VocalMP3Player/app/build/outputs/apk/debug/app-debug.apk

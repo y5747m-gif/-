@@ -233,15 +233,7 @@ private fun ProgressBar(
                 thumbColor = NeonCyan,
                 activeTrackColor = NeonCyan,
                 inactiveTrackColor = Color.White.copy(alpha = 0.15f)
-            ),
-            thumb = {
-                Box(
-                    modifier = Modifier
-                        .size(14.dp)
-                        .clip(CircleShape)
-                        .background(NeonCyan)
-                )
-            }
+            )
         )
 
         Row(
