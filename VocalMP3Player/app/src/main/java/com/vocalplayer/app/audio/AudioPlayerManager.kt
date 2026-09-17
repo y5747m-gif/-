@@ -88,8 +88,8 @@ class AudioPlayerManager(private val context: Context) {
                     equalizer?.let { eq ->
                         eq.enabled = true
                         val freqRange = IntRange(
-                            eq.getCenterFreq(0).toInt() / 1000,
-                            eq.getCenterFreq(eq.numberOfBands.toInt() - 1).toInt() / 1000
+                            eq.getCenterFreq(0.toShort()).toInt() / 1000,
+                            eq.getCenterFreq((eq.numberOfBands.toInt() - 1).toShort()).toInt() / 1000
                         )
                         val settings = vocalProcessor.getEqualizerSettings(
                             eq.numberOfBands.toInt(), freqRange
