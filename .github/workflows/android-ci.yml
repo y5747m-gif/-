@@ -1,0 +1,57 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - main
+      - arena/01a0b0ea-repo
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: VocalMP3Player
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            VocalMP3Player/*.gradle.kts
+            VocalMP3Player/gradle/wrapper/gradle-wrapper.properties
+            VocalMP3Player/app/*.gradle.kts
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Run tests, lint, and build APK
+        run: ./gradlew --no-daemon --stacktrace testDebugUnitTest lintDebug assembleDebug
+
+      - name: Upload debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vocal-mp3-player-debug
+          path: VocalMP3Player/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
